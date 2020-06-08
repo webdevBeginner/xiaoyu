@@ -1,14 +1,14 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('资讯详情')" left-arrow @click-left="onClickLeft" />
-    <div v-show="!LOADING" class="mine-content">
+    <van-nav-bar :title="$t('资讯详情')" @click-left="onClickLeft" left-arrow />
+    <div class="mine-content" v-show="!LOADING">
       <div class="title">{{news.title}}</div>
-      <div class="from">
-        <span>来自{{news.author}}</span>
-        <span>{{new Date(news.date) | formate}}</span>
-      </div>
       <div class="artcal" v-html="news.details"></div>
+      <div class="from">
+        <p>来自{{news.author}}</p>
+        <p>{{new Date(news.create_date) | formate}}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -18,13 +18,13 @@ import { formateDate } from "@/utils/date";
 import { mapState } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       news: {}
     };
   },
   filters: {
-    formate(time) {
+    formate (time) {
       let date = new Date(time);
       return formateDate(date, "YYYY-MM-dd hh:mm");
     }
@@ -32,26 +32,25 @@ export default {
   computed: {
     ...mapState(["LOADING"])
   },
-  created() {
+  created () {
     this.$store.commit("showLoading");
     this.mview.socket.send({
       data: {
-        method: "NEW_DETAIL_VIEW",
-        type: this.$route.params.item.type,
+        method: "UPDATE_MESSAGE_STATUS_ACTION",
         id: this.$route.params.item.id
       },
       success: data => {
         this.$store.commit("hideLoading");
         if (data.Code == 0) {
-          this.news = data.Data.news;
+          this.news = data.Data.message;
         } else {
-          this.$notify(data.Message);
+          this.$toast(this.$t(data.Message));
         }
       }
     });
   },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     }
@@ -60,7 +59,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -73,19 +72,20 @@ export default {
     background: #f8f8f8;
     flex: 1;
     .title {
+      text-align: center;
       font-size: 0.32rem;
+      margin-bottom: 0.4rem;
+    }
+    .artcal {
+      color: #101010;
+      font-size: 0.3rem;
     }
     .from {
       color: #999;
       font-size: 0.22rem;
       margin-top: 0.5rem;
       margin-bottom: 0.3rem;
-      display: flex;
-      justify-content: space-between;
-    }
-    .artcal {
-      color: #999;
-      font-size: 0.3rem;
+      text-align: right;
     }
   }
 }

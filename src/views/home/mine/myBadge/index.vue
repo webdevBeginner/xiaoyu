@@ -1,9 +1,9 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('DAO列表')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('DAO列表')" @click-left="onClickLeft" left-arrow />
     <div class="list">
-      <div class="li" v-for="(item,index) in badgeList" :key="index">
+      <div :key="index" class="li" v-for="(item,index) in badgeList">
         <div class="now" v-if="money > 0 && now_id === item.id">{{$t('当前级别')}}</div>
         <div class="img"></div>
         <div class="content">
@@ -11,7 +11,7 @@
           <p>{{$t('价值')}}≥{{item.min_amount}}ZEC</p>
           <p>{{$t('ZDAO收益/年')}} {{item.release_rate.toFixed(2)}} %</p>
         </div>
-        <van-button @click="BuyBadge(item)" class="button" type="info" color="#D0E8FF">{{$t('购买')}}</van-button>
+        <van-button @click="BuyBadge(item)" class="button" color="#D0E8FF" type="info">{{$t('购买')}}</van-button>
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
 import { mapState, mapGetters } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       id: 0
     };
@@ -30,13 +30,13 @@ export default {
     ...mapState(["LOADING", "badgeList", "now_id", "money"]),
     ...mapGetters(["get_chickens"])
   },
-  created() {},
+  created () { },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     },
     // 购买或者升级页面
-    BuyBadge(item) {
+    BuyBadge (item) {
       console.log(this.now_id);
       this.$store.commit("get_now_id", item.id);
       this.$router.push({
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   overflow: hidden;
@@ -110,40 +110,40 @@ export default {
       }
       &:nth-of-type(1) {
         .img {
-          .bg-image("../../../../../static/img/yiji");
+          .bg-image('../../../../../static/img/yiji');
         }
       }
       &:nth-of-type(2) {
         .img {
-          .bg-image("../../../../../static/img/erji");
+          .bg-image('../../../../../static/img/erji');
         }
       }
       &:nth-of-type(3) {
         .img {
-          .bg-image("../../../../../static/img/sanji");
+          .bg-image('../../../../../static/img/sanji');
         }
       }
       &:nth-of-type(4) {
         .img {
-          .bg-image("../../../../../static/img/siji");
+          .bg-image('../../../../../static/img/siji');
         }
       }
       &:nth-of-type(5) {
         .img {
-          .bg-image("../../../../../static/img/wuji");
+          .bg-image('../../../../../static/img/wuji');
         }
       }
       /deep/.van-button {
         width: 1.78rem;
         height: 0.62rem;
         line-height: 0.62rem;
-        color: #2659ff;
+        color: #ef314b;
         margin: auto;
         border: 0;
         border-radius: 0.1rem;
       }
       .button {
-        color: #2659ff !important;
+        color: #ef314b !important;
       }
     }
   }

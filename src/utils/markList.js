@@ -31,8 +31,7 @@ export const markList = {
         class: 'zhizun',
         class_name: 'zhizun_name',
     }],
-    coinTypeList: [
-        {
+    coinTypeList: [{
             key: 'USDT',
             value: 'USDT',
         }, {
@@ -53,8 +52,7 @@ export const markList = {
             value: 'ZEC',
         },
     ],
-    coinKeyType: [
-        {
+    coinKeyType: [{
             key: 1,
             value: 'COIN',
         }, {
@@ -74,6 +72,9 @@ export const markList = {
         {
             key: 6,
             value: 'ZEC',
+        }, {
+            key: 11,
+            value: 'HGF',
         },
     ],
     //   审核状态
@@ -90,26 +91,23 @@ export const markList = {
         key: 4,
         value: '已拒绝',
     }],
-    badgeView: [
-        {
-            key: 1,
-            value: '一星徽章',
-        }, {
-            key: 2,
-            value: '二星徽章',
-        }, {
-            key: 3,
-            value: '三星徽章',
-        }, {
-            key: 4,
-            value: '四星徽章',
-        }, {
-            key: 5,
-            value: '五星徽章',
-        },
-    ],
-    revenueList: [
-        {
+    badgeView: [{
+        key: 1,
+        value: '一星徽章',
+    }, {
+        key: 2,
+        value: '二星徽章',
+    }, {
+        key: 3,
+        value: '三星徽章',
+    }, {
+        key: 4,
+        value: '四星徽章',
+    }, {
+        key: 5,
+        value: '五星徽章',
+    }, ],
+    revenueList: [{
             key: 1,
             value: '静态收益',
         }, {

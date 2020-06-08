@@ -6,37 +6,37 @@
 
     <!-- 这里是下面的切换页面 -->
     <router-view />
-    <van-tabbar v-if=" $route.meta.type === 2" :border="false" route v-model="active">
+    <van-tabbar :border="false" route v-if=" $route.meta.type === 2" v-model="active">
       <van-tabbar-item replace to="/home/Assets">
-        <span>DeFi</span>
+        <span>资产</span>
         <img
-          slot="icon"
-          slot-scope="props"
           :src="props.active ? require('#/img/act-zichan@2x.png') : require('#/img/zichan@2x.png')"
-        />
-      </van-tabbar-item>
-      <van-tabbar-item replace to="/home/dao">
-        <span>DAO</span>
-        <img
           slot="icon"
           slot-scope="props"
-          :src="props.active ? require('#/img/act-dao@2x.png') : require('#/img/dao@2x.png')"
         />
       </van-tabbar-item>
-      <van-tabbar-item replace to="/myTeam">
-        <span>{{$t('团队')}}</span>
+      <van-tabbar-item replace to="/home/hgf">
+        <span>工厂</span>
         <img
+          :src="props.active ? require('#/img/act-gongchang@2x.png') : require('#/img/gongchang@2x.png')"
           slot="icon"
           slot-scope="props"
-          :src="props.active ? require('#/img/act-tuandui@2x.png') : require('#/img/tuandui@2x.png')"
+        />
+      </van-tabbar-item>
+      <van-tabbar-item replace to="/Shop">
+        <span>{{$t('商城')}}</span>
+        <img
+          :src="props.active ? require('#/img/act-shangcheng@2x.png') : require('#/img/shangcheng@2x.png')"
+          slot="icon"
+          slot-scope="props"
         />
       </van-tabbar-item>
       <van-tabbar-item replace to="/home/mine">
         <span>{{$t('我的')}}</span>
         <img
+          :src="props.active ? require('#/img/act-wode@2x.png') : require('#/img/wode@2x.png')"
           slot="icon"
           slot-scope="props"
-          :src="props.active ? require('#/img/act-wode@2x.png') : require('#/img/wode@2x.png')"
         />
       </van-tabbar-item>
     </van-tabbar>
@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       active: 0,
       icon: {
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../style/mixin.less";
+@import '../../style/mixin.less';
 .home {
   height: 100%;
   overflow: hidden;

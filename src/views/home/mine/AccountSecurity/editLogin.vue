@@ -1,34 +1,34 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('修改密码')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('修改密码')" @click-left="onClickLeft" left-arrow />
     <div class="mine-content">
       <div class="usernameWrap">
         <van-field
+          :placeholder="$t('请输入旧的密码')"
           class="pd"
           type="password"
           v-model="registerInfo.old_password"
-          :placeholder="$t('请输入旧的密码')"
         />
         <van-field
+          :placeholder="$t('请输入6-16位的新密码')"
           class="pd"
           type="password"
           v-model="registerInfo.new_password"
-          :placeholder="$t('请输入6-16位的新密码')"
         />
         <van-field
+          :placeholder="$t('请再次输入新密码')"
           class="pd"
           type="password"
           v-model="registerInfo.re_password"
-          :placeholder="$t('请再次输入新密码')"
         />
       </div>
       <van-button
-        class="loginBtn"
-        type="info"
-        color="#006FDF"
-        size="large"
         @click="sureAndLogin"
+        class="loginBtn"
+        color="#EF314B"
+        size="large"
+        type="info"
       >{{$t('确定')}}</van-button>
     </div>
   </div>
@@ -38,7 +38,7 @@
 import { mapState } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       registerInfo: {
         old_password: "",
@@ -51,12 +51,12 @@ export default {
     ...mapState(["LOADING"])
   },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     },
     // 确定并登录
-    sureAndLogin() {
+    sureAndLogin () {
       let reg_pwd = /[A-Za-z0-9]$/;
       if (this.registerInfo.old_password === "") {
         this.$toast(this.$t("旧密码不得为空"));
@@ -110,7 +110,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   overflow: hidden;
@@ -137,13 +137,14 @@ export default {
         background-position: left;
         &:nth-of-type(1) {
           background-size: 0.35rem;
-          .bg-image("../../../../../static/img/jiumima");
+          .bg-image('../../../../../static/img/jiumima');
         }
         &:nth-of-type(2) {
-          .bg-image("../../../../../static/img/mima-blue");
+          background-size: 0.44rem;
+          .bg-image('../../../../../static/img/mima');
         }
         &:nth-of-type(3) {
-          .bg-image("../../../../../static/img/mima-sure");
+          .bg-image('../../../../../static/img/mima-sure');
         }
       }
     }

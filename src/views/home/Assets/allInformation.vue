@@ -1,63 +1,32 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('全部资讯')" left-arrow @click-left="onClickLeft"></van-nav-bar>
+    <van-nav-bar :title="$t('消息中心')" @click-left="onClickLeft" left-arrow></van-nav-bar>
     <!-- 内容部分 -->
     <div class="mine-content">
-      <van-tabs v-model="active" animated>
-        <van-tab :title="$t('公告')">
-          <div v-if="adv_list.length">
-            <div
-              class="advisory_content"
-              v-for="(item,index) in adv_list"
-              :key="index"
-              @click="goRoute('informationDetail','item',item)"
-            >
-              <div class="adv_act">
-                <div class="adv_title">{{item.title}}</div>
-                <p class="adv_cont">{{item.content}}</p>
-                <div class="act_bottom">
-                  <span>{{$t('来自')}}{{item.author}}</span>
-                  <span>{{new Date(item.date) | formate}}</span>
-                </div>
-              </div>
-              <div class="adv_img">
-                <img :src="item.icon ? item.icon : require('#/img/gonggao@2x.png')" alt />
-              </div>
-            </div>
+      <div v-if="adv_list.length">
+        <div
+          :key="index"
+          @click="goRoute('informationDetail','item',item)"
+          class="advisory_content"
+          v-for="(item,index) in adv_list"
+        >
+          <div class="dian" v-if="!item.status"></div>
+          <div class="adv_title">
+            <span>{{item.type ? '通知': '公告'}}</span>
+            <span :class="item.status ? 'yidu':'weidu'">{{item.status? '已读' : '未读'}}</span>
           </div>
-          <div v-if="!adv_list.length && !LOADING" class="noData">
-            <div class="img"></div>
-            <p>{{$t('暂无公告')}}</p>
+          <p class="adv_cont">{{item.content}}</p>
+          <div class="act_bottom">
+            <span>{{new Date(item.create_date) | formate}}</span>
+            <span>{{$t('查看详情>>')}}</span>
           </div>
-        </van-tab>
-        <van-tab :title="$t('新闻')">
-          <div class="auto" v-if="adv_list.length">
-            <div
-              class="advisory_content"
-              v-for="(item,index) in adv_list"
-              :key="index"
-              @click="goRoute('informationDetail','item',item)"
-            >
-              <div class="adv_act">
-                <div class="adv_title">{{item.title}}</div>
-                <p class="adv_cont">{{item.content}}</p>
-                <div class="act_bottom">
-                  <span>{{$t('来自')}}{{item.author}}</span>
-                  <span>{{new Date(item.date) | formate}}</span>
-                </div>
-              </div>
-              <div class="adv_img">
-                <img :src="item.icon ? item.icon : require('#/img/gonggao@2x.png')" alt />
-              </div>
-            </div>
-          </div>
-          <div v-if="!adv_list.length && !LOADING" class="noData">
-            <div class="img"></div>
-            <p>{{$t('暂无新闻')}}</p>
-          </div>
-        </van-tab>
-      </van-tabs>
+        </div>
+      </div>
+      <div class="noData" v-if="!adv_list.length && !LOADING">
+        <div class="img"></div>
+        <p>{{$t('暂无公告')}}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -67,23 +36,23 @@ import { formateDate } from "@/utils/date";
 import { mapGetters, mapState } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       active: 0,
       //   公告
       adv_list: []
     };
   },
-  created() {
+  created () {
     this.get_news();
   },
   watch: {
-    active(val) {
+    active (val) {
       this.get_news();
     }
   },
   filters: {
-    formate(time) {
+    formate (time) {
       let date = new Date(time);
       return formateDate(date, "YYYY-MM-dd hh:mm");
     }
@@ -92,23 +61,20 @@ export default {
     ...mapState(["LOADING"])
   },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     },
-    get_news() {
+    get_news () {
       this.adv_list = [];
       this.$store.commit("showLoading");
       this.mview.socket.send({
         data: {
-          method: "NEWS_VIEW",
-          type: this.active + 1,
-          page: 1,
-          count: 10
+          method: "USER_MESSAGE_VIEW",
         },
         success: data => {
           this.$store.commit("hideLoading");
           if (data.Code == 0) {
-            this.adv_list = data.Data.lists;
+            this.adv_list = data.Data.messages;
           } else {
             this.$toast(this.$t(data.Message));
           }
@@ -116,7 +82,7 @@ export default {
       });
     },
     // 路由链接
-    goRoute(name, paramsName, params) {
+    goRoute (name, paramsName, params) {
       this.$router.push({
         name: name,
         params: { [paramsName]: params }
@@ -127,7 +93,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -151,64 +117,73 @@ export default {
     }
     .advisory_content {
       margin: 0.2rem auto 0;
-      height: 1.89rem;
       width: 90%;
       background: #fff;
       border-radius: 0.2rem;
-      padding: 0.18rem;
+      padding: 0.4rem;
       margin-bottom: 0.3rem;
       box-sizing: border-box;
       display: flex;
-      .adv_act {
-        flex: 1;
-        .adv_title {
-          width: 3.8rem;
-          font-size: 0.3rem;
+      flex-direction: column;
+      box-shadow: 0px 3px 5px 0px rgba(105, 105, 105, 0.35);
+      border-radius: 0.2rem;
+      position: relative;
+      .dian {
+        position: absolute;
+        width: 0.12rem;
+        height: 0.12rem;
+        background: #ef314b;
+        border-radius: 50%;
+        left: 0.18rem;
+        top: 0.18rem;
+      }
+      .adv_title {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.2rem;
+        span:first-child {
+          width: 3.18rem;
+          font-size: 0.36rem;
           text-align: left;
           line-height: 0.5rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        .adv_cont {
-          color: #999;
+        .yidu {
           font-size: 0.24rem;
-          text-align: left;
-          margin: 0;
-          width: 3.8rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-        }
-        .act_bottom {
-          width: 3.8rem;
-          display: flex;
-          justify-content: space-between;
           color: #999;
-          font-size: 0.22rem;
-          line-height: 0.6rem;
-          span {
-            &:first-of-type {
-              width: 1.2rem;
-              overflow: hidden;
-              text-align: left;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-          }
+        }
+        .weidu {
+          font-size: 0.24rem;
+          color: #ef314b;
         }
       }
-      .adv_img {
-        width: 2.26rem;
-        height: 100%;
-        border: 1px solid rgba(255, 227, 72, 1);
-        border-radius: 0.2rem;
+      .adv_cont {
+        color: #101010;
+        font-size: 0.3rem;
+        text-align: left;
+        margin: 0;
         overflow: hidden;
-        img {
-          width: 100%;
-          height: 100%;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+      .act_bottom {
+        display: flex;
+        justify-content: space-between;
+        color: #999;
+        font-size: 0.24rem;
+        line-height: 0.6rem;
+        span {
+          &:first-of-type {
+            overflow: hidden;
+            text-align: left;
+          }
+          &:last-child {
+            color: #ef314b;
+          }
         }
       }
     }
@@ -219,7 +194,7 @@ export default {
         width: 1.34rem;
         height: 1.34rem;
         margin: 3.5rem auto 0;
-        .bg-image("../../../../static/img/zanwu");
+        .bg-image('../../../../static/img/zanwu');
         background-repeat: no-repeat;
         background-size: contain;
       }

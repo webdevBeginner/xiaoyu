@@ -1,17 +1,17 @@
 <template>
   <div class="Revenue">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('可用收益')" left-arrow @click-left="onClickLeft"></van-nav-bar>
+    <van-nav-bar :title="$t('可用收益')" @click-left="onClickLeft" left-arrow></van-nav-bar>
     <!-- 记录部分 -->
-    <div v-show="!LOADING" class="history">
+    <div class="history" v-show="!LOADING">
       <!-- 总收益 -->
       <div class="DetailTotal">
         <p>{{Data.total}}</p>
         <p>{{$t('总收益')}} (ZEC)</p>
       </div>
       <!-- 细则 -->
-      <div v-if="Data.records.length" class="list">
-        <div class="li" v-for="(item,index) in Data.records" :key="index">
+      <div class="list" v-if="Data.records.length">
+        <div :key="index" class="li" v-for="(item,index) in Data.records">
           <div class="left">
             <p>[{{new Date(item.date) | formate}}]</p>
             <p>
@@ -19,7 +19,7 @@
               <span>{{item.amount_double}} ZEC</span>
             </p>
           </div>
-          <div class="right" @click="goRoute('detailRevenue','date', item.date)">{{$t('查看')}}</div>
+          <div @click="goRoute('detailRevenue','date', item.date)" class="right">{{$t('查看')}}</div>
         </div>
       </div>
       <div class="noData" v-if="!Data.records.length && !LOADING">
@@ -34,7 +34,7 @@
 import { formateDate } from "@/utils/date";
 import { mapGetters, mapState } from "vuex";
 export default {
-  data() {
+  data () {
     return {
       Data: {
         total: 0,
@@ -42,11 +42,11 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.init();
   },
   filters: {
-    formate(time) {
+    formate (time) {
       let date = new Date(time);
       return formateDate(date, "YYYY-MM-dd");
     }
@@ -56,7 +56,7 @@ export default {
     ...mapGetters(["get_chickens"])
   },
   methods: {
-    init() {
+    init () {
       this.$store.commit("showLoading");
       this.mview.socket.send({
         data: {
@@ -76,12 +76,12 @@ export default {
         }
       });
     },
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     },
     // 路由链接
-    goRoute(name, paramsName, params) {
+    goRoute (name, paramsName, params) {
       this.$router.push({
         name: name,
         params: { [paramsName]: params }
@@ -92,7 +92,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
 .Revenue {
   height: 100%;
   display: flex;
@@ -109,7 +109,7 @@ export default {
     .DetailTotal {
       width: 6.86rem !important;
       height: 2.46rem !important;
-      .bg-image("../../../../static/img/shouyi-bg");
+      .bg-image('../../../../static/img/shouyi-bg');
       background-repeat: no-repeat;
       background-size: contain;
       margin: 0 auto;
@@ -154,7 +154,7 @@ export default {
               font-size: 0.28rem;
             }
             span {
-              color: #2659ff;
+              color: #ef314b;
             }
           }
         }
@@ -167,7 +167,7 @@ export default {
           display: flex;
           align-items: flex-end;
           justify-content: center;
-          background: #2659ff;
+          background: #ef314b;
           margin: auto 0;
           border-radius: 0.1rem;
         }
@@ -179,7 +179,7 @@ export default {
         width: 2.3rem;
         height: 1.9rem;
         margin: 0.88rem auto 0.3rem;
-        .bg-image("../../../../static/img/zanwushuju");
+        .bg-image('../../../../static/img/zanwushuju');
         background-repeat: no-repeat;
         background-size: contain;
       }

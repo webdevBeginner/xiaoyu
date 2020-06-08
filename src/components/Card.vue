@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" v-for="(item,index) in List" :key="index">
+    <div :key="index" class="card" v-for="(item,index) in List">
       <div class="title">
         <span>{{get_chickens(item.coin_type_id,'coinKeyType').name}}</span>
         <span>{{item.direction ? '+' : '-'}}{{item.amount_double}}</span>
@@ -18,11 +18,11 @@
 import { mapGetters } from "vuex";
 import { formateDate } from "@/utils/date";
 export default {
-  data() {
+  data () {
     return {};
   },
   filters: {
-    formate(time) {
+    formate (time) {
       let date = new Date(time);
       return formateDate(date, "YYYY-MM-dd hh:mm");
     }
@@ -53,7 +53,7 @@ export default {
     span {
       &:last-of-type {
         font-size: 0.36rem;
-        color: #2659ff;
+        color: #ef314b;
       }
     }
   }

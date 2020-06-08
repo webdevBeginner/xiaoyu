@@ -15,7 +15,7 @@
 @red: #ee0a24;
 @blue: #1989fa;
 @orange: #ff976a;
-@yellow: #2659FF;
+@yellow: #EF314B;
 @orange-dark: #ed6a0c;
 @orange-light: #fffbe8;
 @green: #07c160;
@@ -34,7 +34,7 @@
 
 // Padding
 @padding-base: 8px;
-@padding-xs: .16rem;
+@padding-xs: .14rem;
 @padding-sm: .24rem;
 @padding-md: .32rem;
 @padding-lg: .48rem;
@@ -47,7 +47,7 @@
 @font-size-lg: .32rem;
 @font-weight-bold: 500;
 @price-integer-font-family: Avenir-Heavy, PingFang SC, Helvetica Neue, Arial,
-    sans-serif;
+  sans-serif;
 
 // Animation
 @animation-duration-base: 0.3s;
@@ -336,7 +336,7 @@
 @dropdown-item-z-index: 10;
 
 // Field
-@field-label-width: 90px;
+@field-label-width: .45rem;
 @field-input-text-color: #888;
 @field-input-error-text-color: @red;
 @field-input-disabled-text-color: @gray-6;
@@ -349,7 +349,7 @@
 @field-error-message-text-color: 12px;
 @field-text-area-min-height: 60px;
 @field-word-limit-color: @gray-7;
-@field-word-limit-font-size: @font-size-sm;
+@field-word-limit-font-size: .14rem;
 @field-word-limit-line-height: 16px;
 @field-word-num-full-color: @red;
 
@@ -682,8 +682,8 @@
 @swipe-indicator-margin: @padding-sm;
 @swipe-indicator-active-opacity: 1;
 @swipe-indicator-inactive-opacity: 0.3;
-@swipe-indicator-active-background-color: @blue;
-@swipe-indicator-inactive-background-color: @border-color;
+@swipe-indicator-active-background-color: @yellow;
+@swipe-indicator-inactive-background-color: #CFCFCF;
 
 // Switch
 @switch-size: 30px;
@@ -693,7 +693,7 @@
 @switch-node-z-index: 1;
 @switch-node-background-color: @white;
 @switch-node-box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.05),
-    0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
+  0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
 @switch-background-color: @white;
 @switch-on-background-color: @blue;
 @switch-transition-duration: @animation-duration-base;
@@ -714,7 +714,7 @@
 // TabbarItem
 @tabbar-item-font-size: @font-size-sm;
 @tabbar-item-text-color: @gray-7;
-@tabbar-item-active-color: #2659FF;
+@tabbar-item-active-color: #EF314B;
 @tabbar-item-line-height: 1;
 @tabbar-item-icon-size: 18px;
 @tabbar-item-margin-bottom: 5px;
@@ -810,129 +810,129 @@
 
 // 重写cell的样式
 .van-cell {
-    padding-right: 0;
-    font-size: 0.32rem;
+  padding-right: 0;
+  font-size: 0.3rem;
 
-    .van-cell__left-icon,
-    .van-cell__right-icon {
-        font-size: 0.32rem;
-    }
+  .van-cell__left-icon,
+  .van-cell__right-icon {
+    font-size: 0.3rem;
+  }
 }
 
 
 
 .van-nav-bar {
-    background: white;
-    line-height: 1rem;
+  background: white;
+  line-height: 1rem;
 
-    .van-nav-bar__arrow {
-        font-size: .44rem;
-    }
+  .van-nav-bar__arrow {
+    font-size: .44rem;
+  }
 
-    .van-nav-bar__title {
-        font-size: .36rem;
-        height: 1.5rem;
-        line-height: 2rem;
-        // letter-spacing: .1rem;
-    }
+  .van-nav-bar__title {
+    font-size: .36rem;
+    height: 1.5rem;
+    line-height: 2rem;
+    // letter-spacing: .1rem;
+  }
 }
 
 .van-button--small {
-    padding: 0;
+  padding: 0;
 }
 
 .van-button--disabled {
-    background: #999 !important;
-    border-color: transparent !important;
+  background: #999 !important;
+  border-color: transparent !important;
 }
 
 .yellowColor {
-    color: #fff !important;
+  color: #fff !important;
 }
 
 .van-button--round {
-    color: #000 !important;
+  color: #000 !important;
 }
 
 .whiteColor {
-    color: #fff;
+  color: #fff;
 }
 
 .van-cell--clickable:active {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .mine-content {
-    .van-cell {
-        height: 0.9rem;
-        line-height: 1.1rem;
-        padding: 0;
-        color: #101010;
-    }
+  .van-cell {
+    height: 0.9rem;
+    line-height: 1.1rem;
+    padding: 0;
+    color: #101010;
+  }
 
-    .van-cell__title {
-        text-align: left;
-    }
+  .van-cell__title {
+    text-align: left;
+  }
 
-    .van-cell__right-icon {
-        line-height: 1.1rem;
-        color: #d8d8d8;
-    }
+  .van-cell__right-icon {
+    line-height: 1.1rem;
+    color: #d8d8d8;
+  }
 }
 
 
 .clipic-frame {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .clipic-operation-bar {
-    font-size: 0.25rem;
-    margin-bottom: .5rem;
-    padding: 0 1rem;
+  font-size: 0.25rem;
+  margin-bottom: .5rem;
+  padding: 0 1rem;
 
-    div {
-        border: 1px solid;
-        border-radius: .1rem;
-        padding: 3px 8px !important;
-        color: #fff !important;
-    }
+  div {
+    border: 1px solid;
+    border-radius: .1rem;
+    padding: 3px 8px !important;
+    color: #fff !important;
+  }
 }
 
 .van-tabs__line {
-    width: 0.9rem !important;
+  width: 0.9rem !important;
 }
 
 
 .van-tab {
-    border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 
-    &:first-of-type::after {
-        position: absolute;
-        right: 0;
-        top: 10px;
-        height: .64rem;
-        width: 2px;
-        border-radius: 50%;
-        background: #eee;
-        display: block;
-        content: ' ';
-    }
+  &:first-of-type::after {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    height: .64rem;
+    width: 2px;
+    border-radius: 50%;
+    background: #eee;
+    display: block;
+    content: ' ';
+  }
 }
 
 .van-tabbar {
-    height: 1rem;
+  height: 1rem;
 
-    .van-tabbar-item {
-        font-size: 0.24rem;
+  .van-tabbar-item {
+    font-size: 0.24rem;
 
-        .van-tabbar-item__icon {
-            font-size: 0.36rem;
+    .van-tabbar-item__icon {
+      font-size: 0.36rem;
 
-            img {
-                height: 0.36rem;
-            }
-        }
+      img {
+        height: 0.36rem;
+      }
     }
+  }
 }
 
 // [class*='van-hairline']::after {
@@ -950,119 +950,119 @@
 // }
 .van-hairline--surround::after,
 .van-hairline--left::after {
-    position: absolute;
-    box-sizing: border-box;
-    content: ' ';
-    pointer-events: none;
-    top: -50%;
-    right: -50%;
-    bottom: -50%;
-    left: -50%;
-    border: 1px solid #e5e5e5 !important;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  top: -50%;
+  right: -50%;
+  bottom: -50%;
+  left: -50%;
+  border: 1px solid #e5e5e5 !important;
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
 }
 
 .van-hairline--bottom::after {
-    position: absolute;
-    box-sizing: border-box;
-    content: ' ';
-    pointer-events: none;
-    top: -50%;
-    right: -50%;
-    bottom: -50%;
-    left: -50%;
-    border: 0px solid transparent !important;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  top: -50%;
+  right: -50%;
+  bottom: -50%;
+  left: -50%;
+  border: 0px solid transparent !important;
+  -webkit-transform: scale(0.5);
+  transform: scale(0.5);
 }
 
 .van-notice-bar {
-    margin-bottom: .3rem;
-    border-radius: 5px;
+  margin-bottom: .3rem;
+  border-radius: 5px;
 }
 
 .van-hairline--top-bottom::after,
 .van-hairline-unset--top-bottom::after {
-    border-width: 0px 0;
+  border-width: 0px 0;
 }
 
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 input[type=number] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input::placeholder {
-    color: #888 !important;
+  color: #888 !important;
 }
 
 .van-cell:not(:last-child)::after,
 .van-cell::after {
-    position: absolute;
-    box-sizing: border-box;
-    content: ' ';
-    pointer-events: none;
-    right: 0;
-    bottom: 0;
-    left: 0px;
-    border-bottom: 1px solid #eee;
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  right: 0;
+  bottom: 0;
+  left: 0px;
+  border-bottom: 1px solid #eee;
+  -webkit-transform: scaleY(0.5);
+  transform: scaleY(0.5);
 }
 
 .Charge {
-    .van-popup {
-        width: 5.6rem;
-        height: 4.16rem;
-        background: #fff;
-        border-radius: 0.14rem;
-        overflow: hidden;
+  .van-popup {
+    width: 5.6rem;
+    height: 4.16rem;
+    background: #fff;
+    border-radius: 0.14rem;
+    overflow: hidden;
 
-        .title {
-            font-size: 0.34rem;
-            color: #333;
-            font-weight: 500;
-            margin: 0.56rem auto;
-        }
-
-        .van-popup__close-icon {
-            font-size: 0.24rem;
-            color: #999;
-        }
-
-        .van-button {
-            width: 80% !important;
-            margin: 0.3rem auto !important;
-        }
+    .title {
+      font-size: 0.34rem;
+      color: #333;
+      font-weight: 500;
+      margin: 0.56rem auto;
     }
 
-    .van-number-keyboard {
-        z-index: 3000;
+    .van-popup__close-icon {
+      font-size: 0.24rem;
+      color: #999;
     }
 
-    .pop {
-        height: 100%;
-        width: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        position: fixed;
+    .van-button {
+      width: 80% !important;
+      margin: 0.3rem auto !important;
     }
+  }
+
+  .van-number-keyboard {
+    z-index: 3000;
+  }
+
+  .pop {
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    position: fixed;
+  }
 }
 
 .van-tabs__content--animated {
-    flex: 1;
-    overflow-y: auto;
-    padding: .3rem;
+  flex: 1;
+  overflow-y: auto;
+  padding: .3rem;
 }
 
 // .DetailTotal {
@@ -1079,24 +1079,24 @@ input::placeholder {
 // }
 
 * {
-    -webkit-touch-callout: none;
-    /*系统默认菜单被禁用*/
-    -webkit-user-select: none;
-    /*webkit浏览器*/
-    -khtml-user-select: none;
-    /*早期浏览器*/
-    -moz-user-select: none;
-    /*火狐*/
-    -ms-user-select: none;
-    /*IE10*/
-    user-select: none;
+  -webkit-touch-callout: none;
+  /*系统默认菜单被禁用*/
+  -webkit-user-select: none;
+  /*webkit浏览器*/
+  -khtml-user-select: none;
+  /*早期浏览器*/
+  -moz-user-select: none;
+  /*火狐*/
+  -ms-user-select: none;
+  /*IE10*/
+  user-select: none;
 }
 
 input,
 textarea {
-    -webkit-user-select: auto;
-    /*webkit浏览器*/
-    margin: 0px;
-    padding: 0px;
-    outline: none;
+  -webkit-user-select: auto;
+  /*webkit浏览器*/
+  margin: 0px;
+  padding: 0px;
+  outline: none;
 }

@@ -1,10 +1,10 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t(title)" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t(title)" @click-left="onClickLeft" left-arrow />
     <div class="mine-content">
-      <div v-if="Data.record.length" class="list">
-        <div class="li" v-for="(item,index) in Data.record" :key="index">
+      <div class="list" v-if="Data.record.length">
+        <div :key="index" class="li" v-for="(item,index) in Data.record">
           <div class="left">
             <p>[{{$t(item.comments)}}]</p>
             <p>
@@ -27,7 +27,7 @@ import { formateDate } from "@/utils/date";
 import { mapGetters, mapState } from "vuex";
 export default {
   // USER_INVITE_VIEW
-  data() {
+  data () {
     return {
       title: "",
       Data: {
@@ -36,7 +36,7 @@ export default {
     };
   },
   filters: {
-    formate(time) {
+    formate (time) {
       let date = new Date(time);
       return formateDate(date, "YYYY-MM-dd hh:mm");
     }
@@ -45,7 +45,7 @@ export default {
     ...mapState(["LOADING"]),
     ...mapGetters(["get_chickens"])
   },
-  created() {
+  created () {
     switch (this.$route.params.method) {
       case "QUERY_BUY_PRODUCT_LIST":
         this.title = "购买记录";
@@ -66,7 +66,7 @@ export default {
     this.init();
   },
   methods: {
-    init() {
+    init () {
       this.$store.commit("showLoading");
       this.mview.socket.send({
         data: {
@@ -82,7 +82,7 @@ export default {
         }
       });
     },
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     }
   }
@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -121,7 +121,7 @@ export default {
               font-size: 0.28rem;
             }
             span {
-              color: #2659ff;
+              color: #ef314b;
             }
           }
         }
@@ -139,7 +139,7 @@ export default {
         width: 4.5rem;
         height: 4.38rem;
         margin: 0.88rem auto 0.3rem;
-        .bg-image("../../../../../static/img/no-history");
+        .bg-image('../../../../../static/img/no-history');
         background-repeat: no-repeat;
         background-size: contain;
       }

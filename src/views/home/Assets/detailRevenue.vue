@@ -1,95 +1,34 @@
 <template>
   <div class="detailRevenue">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t(title)" left-arrow @click-left="onClickLeft"></van-nav-bar>
+    <van-nav-bar :title="$t(title)" @click-left="onClickLeft" left-arrow>
+      <template #right>
+        <van-icon name="question-o" size="18" />
+      </template>
+    </van-nav-bar>
     <!-- 记录部分 -->
-    <div v-show="!LOADING && Data" class="history">
+    <div class="history" v-show="!LOADING && Data">
       <!-- 总收益 -->
-      <div class="DetailTotal">
-        <p>{{Data.total}}</p>
-        <p v-if="Data.date">
-          {{Data.date}} {{$t('总收益')}}
-          <span>(ZEC)</span>
-        </p>
-        <p v-else-if="$route.params.methods">
-          {{$t('赠送')}}
-          <span>(ZEC)</span>
-        </p>
-        <p v-else>
-          {{$t('余额')}}
-          <span>(ZEC)</span>
-        </p>
+      <div :class="totalList.length <= 2 ?'lessTotal' :''" class="DetailTotal">
+        <div :key="index" class="Detail" v-for="(item,index) in totalList">
+          <p>{{Data[item.name]}}</p>
+          <p>{{$t(item.title)}}</p>
+        </div>
       </div>
-      <!-- 细则 -->
-      <van-tabs v-if="Data.teams" v-model="activeName">
-        <van-tab :title="$t('个人收益')" name="a">
-          <div v-if="Data.incomes.length" class="list">
-            <div class="li" v-for="(item,index) in Data.incomes" :key="index">
-              <div class="left">
-                <p>[{{$t(item.comments)}}]</p>
-                <p>
-                  <span>{{item.direction ? `+${item.amount_double}` : `-${item.amount_double}`}} ZEC</span>
-                </p>
-              </div>
-              <div class="right">{{new Date(item.create_date) | formate}}</div>
-            </div>
+      <div class="list" v-if="Data.incomes.length">
+        <div :key="index" class="li" v-for="(item,index) in Data.incomes">
+          <div class="left">
+            <p>[{{$t(item.comments)}}]</p>
+            <p>
+              <span>{{item.direction ? `+${item.amount_double}` : `-${item.amount_double}`}} HGF</span>
+            </p>
           </div>
-          <div class="noData" v-if="!Data.incomes.length && !LOADING">
-            <div class="img"></div>
-            <p>{{$t('暂无数据')}}</p>
-          </div>
-        </van-tab>
-        <van-tab :title="$t('团队收益')" name="b">
-          <div v-if="Data.teams.length" class="list">
-            <div class="li" v-for="(item,index) in Data.teams" :key="index">
-              <div class="left">
-                <p>[{{$t(item.comments)}}]</p>
-                <p>
-                  <span>{{item.direction ? `+${item.amount_double}` : `-${item.amount_double}`}} ZEC</span>
-                </p>
-              </div>
-              <div class="right">{{new Date(item.create_date) | formate}}</div>
-            </div>
-          </div>
-          <div class="noData" v-if="!Data.teams.length && !LOADING">
-            <div class="img"></div>
-            <p>{{$t('暂无数据')}}</p>
-          </div>
-        </van-tab>
-        <van-tab :title="$t('直推收益')" name="c">
-          <div v-if="Data.pushs.length" class="list">
-            <div class="li" v-for="(item,index) in Data.pushs" :key="index">
-              <div class="left">
-                <p>[{{$t(item.comments)}}]</p>
-                <p>
-                  <span>{{item.direction ? `+${item.amount_double}` : `-${item.amount_double}`}} ZEC</span>
-                </p>
-              </div>
-              <div class="right">{{new Date(item.create_date) | formate}}</div>
-            </div>
-          </div>
-          <div class="noData" v-if="!Data.pushs.length && !LOADING">
-            <div class="img"></div>
-            <p>{{$t('暂无数据')}}</p>
-          </div>
-        </van-tab>
-      </van-tabs>
-      <div class="auto" v-else>
-        <div v-if="Data.incomes.length" class="list">
-          <div class="li" v-for="(item,index) in Data.incomes" :key="index">
-            <div class="left">
-              <p>[{{$t(item.comments)}}]</p>
-              <p>
-                <span>{{item.direction ? `+${item.amount_double}` : `-${item.amount_double}`}} ZEC</span>
-              </p>
-            </div>
-            <div class="right">{{new Date(item.create_date) | formate}}</div>
-          </div>
+          <div class="right">{{new Date(item.create_date) | formate}}</div>
         </div>
-        <div class="noData" v-if="!Data.incomes.length && !LOADING">
-          <div class="img"></div>
-          <p>{{$t('暂无数据')}}</p>
-        </div>
+      </div>
+      <div class="noData" v-if="!Data.incomes.length && !LOADING">
+        <div class="img"></div>
+        <p>{{$t('暂无数据')}}</p>
       </div>
     </div>
   </div>
@@ -99,11 +38,12 @@
 import { formateDate } from "@/utils/date";
 import { mapGetters, mapState } from "vuex";
 export default {
-  data() {
+  data () {
     return {
       activeName: "a",
+      totalList: [],
       Data: {
-        total: 6.370165,
+        total: 0.00,
         title: "",
         type: 4,
         incomes: [],
@@ -112,20 +52,42 @@ export default {
       }
     };
   },
-  created() {
-    if (this.$route.params.date) {
-      this.title = "收益详情";
-      this.init();
-    } else if (this.$route.params.methods) {
-      this.title = "赠送记录";
-      this.initList(this.$route.params.methods);
-    } else {
-      this.title = "可用余额";
-      this.initList("USER_ACCOUNT_DATEILS");
+  created () {
+    this.initList(this.$route.params.methods);
+    switch (this.$route.params.methods) {
+      case 'USER_ACCOUNT_DATEILS_VIEW':
+        this.title = "资产记录";
+        this.totalList = [
+          { title: '可用资产', name: 'usable' },
+          { title: '锁定资产', name: 'locked' },
+          { title: '冻结资产', name: 'freezen' },
+        ]
+        break;
+      case 'USER_HONOR_VIEW':
+        this.title = "荣誉值记录";
+        this.totalList = [
+          { title: '荣誉值', name: 'honor' }
+        ]
+        break;
+      case 'QUERY_BUY_PRODUCT_VIEW':
+        this.title = "活跃度记录";
+        this.totalList = [
+          { title: '基础活跃度', name: 'activity' },
+          { title: '推广活跃度', name: 'promotionActivity' },
+        ]
+        break;
+      case 'REGISTRATION_AWARD_VIEW':
+        this.title = "贡献度记录";
+        this.totalList = [
+          { title: '贡献度', name: 'total' }
+        ]
+        break;
+      default:
+        this.title = '记录'
     }
   },
   filters: {
-    formate(time) {
+    formate (time) {
       let date = new Date(time);
       return formateDate(date, "YYYY-MM-dd hh:mm");
     }
@@ -135,24 +97,7 @@ export default {
     ...mapGetters(["get_chickens"])
   },
   methods: {
-    init() {
-      this.$store.commit("showLoading");
-      this.mview.socket.send({
-        data: {
-          method: "DAY_INCOME_VIEW",
-          date: formateDate(new Date(this.$route.params.date), "YYYY-MM-dd")
-        },
-        success: data => {
-          if (data.Code == 0) {
-            this.$store.commit("hideLoading");
-            this.Data = data.Data;
-          } else {
-            this.$toast(this.$t(data.Message));
-          }
-        }
-      });
-    },
-    initList(methods) {
+    initList (methods) {
       this.$store.commit("showLoading");
       this.mview.socket.send({
         data: {
@@ -168,7 +113,7 @@ export default {
         }
       });
     },
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     }
@@ -177,7 +122,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
 .detailRevenue {
   height: 100%;
   display: flex;
@@ -194,22 +139,39 @@ export default {
     .DetailTotal {
       width: 6.86rem;
       height: 2.46rem;
-      .bg-image("../../../../static/img/shouyi-bg");
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .bg-image('../../../../static/img/shouyi-bg');
       background-repeat: no-repeat;
       background-size: contain;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      p {
-        line-height: 0.6rem;
-        margin: 0;
-        color: #fff;
-        font-size: 0.3rem;
-        &:first-of-type {
-          font-size: 0.48rem;
+      box-sizing: border-box;
+      .Detail {
+        position: relative;
+        width: 100%;
+        p {
+          line-height: 0.6rem;
+          margin: 0;
+          color: #fff;
+          font-size: 0.3rem;
         }
+        &:not(:last-child)::after {
+          position: absolute;
+          right: 0;
+          top: 20%;
+          height: 0.7rem;
+          width: 2px;
+          border-radius: 40%;
+          background: #c6c6c6;
+          display: block;
+          content: ' ';
+        }
+      }
+    }
+    .lessTotal {
+      p:first-child {
+        font-size: 0.48rem !important;
       }
     }
     .van-tabs {
@@ -226,7 +188,7 @@ export default {
           border-radius: 50%;
           background: #eee;
           display: block;
-          content: " ";
+          content: ' ';
         }
       }
       /deep/.van-tabs__line {
@@ -242,6 +204,8 @@ export default {
       overflow: auto;
     }
     .list {
+      flex: 1;
+      overflow: auto;
       padding: 0 0.4rem 1rem;
       .li {
         display: flex;
@@ -258,15 +222,15 @@ export default {
               font-size: 0.28rem;
             }
             span {
-              color: #000;
+              color: #ef314b;
             }
           }
         }
         .right {
           display: flex;
           align-items: flex-end;
-          color: #999;
-          font-size: 0.24rem;
+          color: #333;
+          font-size: 0.28rem;
         }
       }
     }
@@ -278,7 +242,7 @@ export default {
     width: 2.3rem;
     height: 1.9rem;
     margin: 0.88rem auto 0.3rem;
-    .bg-image("../../../../static/img/zanwushuju");
+    .bg-image('../../../../static/img/zanwushuju');
     background-repeat: no-repeat;
     background-size: contain;
   }

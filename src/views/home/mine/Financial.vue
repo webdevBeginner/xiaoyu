@@ -1,21 +1,20 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('团队等级说明')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('团队规则')" @click-left="onClickLeft" left-arrow />
     <div class="list">
-      <div class="li" v-for="(item,index) in badgeList" :key="index">
+      <div :key="index" class="li" v-for="(item,index) in badgeList">
         <div class="now" v-if="item.now">{{$t('当前级别')}}</div>
-        <div class="img" :class="'z' +item.level "></div>
-        <div class="content">
-          <div class="title" :class="item.act ? 'act-title' : ''">
-            <span>{{item.title}}：</span>
-            <p>
-              Z
-              <span>{{item.level}}</span>
-            </p>
+        <div class="top">
+          <div :class="item.name+'xing'" class="img"></div>
+          <div class="content">
+            <div :class="item.act ? 'act-title' : ''" class="title">
+              <span>{{item.title}}</span>
+            </div>
+            <div class="remark" v-html="item.content"></div>
           </div>
-          <div v-html="item.content" class="remark"></div>
         </div>
+        <div class="bottom">{{item.reward}}</div>
       </div>
     </div>
   </div>
@@ -24,7 +23,7 @@
 <script>
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       // 当前的理财规则
       nowLevel: 2,
@@ -32,41 +31,44 @@ export default {
       badgeList: [
         {
           level: 1,
-          title: `${this.$t("第一级别")}`,
-          content: `1、${this.$t("直推3个有效用户")}</br>2、${this.$t(
-            "团队业绩≥300ZEC"
-          )}`
+          name: 'yi',
+          title: `${this.$t("初级创业者")}`,
+          content: `1、${this.$t("团队总活跃度 500 点")}</br>2、${this.$t(
+            "有效直推 20 人"
+          )}`,
+          reward: '奖励初级矿机一台+全球交易手续费分红5%'
         },
         {
           level: 2,
-          title: `${this.$t("第二级别")}`,
-          content: `1、${this.$t("三个部门中任意产生一个Z1")}</br>2、${this.$t(
-            "团队业绩≥1000ZEC"
-          )}`
+          name: 'er',
+          title: `${this.$t("中级创业者")}`,
+          content: `1、${this.$t("团队总活跃度达到 2000 点")}</br>2、${this.$t(
+            "小区活跃度达到 20%"
+          )}`,
+          reward: '奖励中级矿机一台+全球交易手续费分红20%'
         },
         {
           level: 3,
-          title: `${this.$t("第三级别")}`,
-          content: `1、${this.$t("三个部门中各产生一个Z1")}</br>2、${this.$t(
-            "团队业绩≥2000ZEC"
-          )}`
+          name: 'san',
+          title: `${this.$t("高级创业者")}`,
+          content: `1、${this.$t("团队总活跃度达到 8000 点")}</br>2、${this.$t(
+            "小区活跃度达到 25%"
+          )}`,
+          reward: '奖励高级矿机一台+全球交易手续费分红15%'
         },
         {
           level: 4,
-          title: `${this.$t("第四级别")}`,
-          content: `1、${this.$t("三个部门中各产生一个Z3")}</br>2、${this.$t(
-            "团队业绩≥3000ZEC"
-          )}`
-        },
-        {
-          level: 5,
-          title: `${this.$t("第五级别")}`,
-          content: `1、${this.$t("三个部门中各产生三个Z4")}`
+          name: 'si',
+          title: `${this.$t("梦想创业者")}`,
+          content: `1、${this.$t("团队总活跃度达到 100000 点")}</br > 2、${this.$t(
+            "小区活跃度达到 25%"
+          )}`,
+          reward: '奖励超级矿机一台+全球交易手续费分红10%'
         }
       ]
     };
   },
-  created() {
+  created () {
     this.mview.socket.send({
       data: {
         method: "USER_LEVEL_VIEW"
@@ -90,7 +92,7 @@ export default {
     });
   },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     }
   }
@@ -98,7 +100,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
 .register {
   height: 100%;
   overflow: hidden;
@@ -107,13 +109,14 @@ export default {
   .list {
     flex: 1;
     overflow: auto;
-    padding: 0 0.5rem;
-    margin-bottom: 0.3rem;
+    padding: 0 0.32rem;
+    margin-top: 0.3rem;
     .li {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.36rem 0 0.2rem;
-      border-bottom: 1px solid #eee;
+      padding: 0.36rem 0 0;
+      background: #fff;
+      border-radius: 0.2rem;
+      margin-bottom: 0.4rem;
+      box-shadow: 0px 3px 5px 0px rgba(105, 105, 105, 0.35);
       position: relative;
       .now {
         position: absolute;
@@ -124,57 +127,49 @@ export default {
         color: #fff;
         font-size: 0.2rem;
         padding: 0 0.1rem;
-        background: #2659ff;
+        background: #ef314b;
         box-shadow: 4px 0px 0px 0px rgba(0, 0, 0, 0.35);
         border-radius: 0px 0.16rem 0.16rem 0px;
       }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 0.3rem;
+      }
+      .bottom {
+        line-height: 1.04rem;
+        color: #101010;
+        font-size: 0.3rem;
+        border-top: 1px solid #ececec;
+      }
       .img {
-        width: 1.27rem;
-        height: 1.3rem;
+        width: 1.98rem;
+        height: 1.84rem;
+        margin-left: 0.2rem;
         margin-right: 0.42rem;
         background-repeat: no-repeat;
         background-size: contain;
         background-position: center;
       }
-      .z1 {
-        .bg-image("../../../../static/img/z1");
+      .yixing {
+        .bg-image('../../../../static/img/yixing');
       }
-      .z2 {
-        .bg-image("../../../../static/img/z2");
+      .erxing {
+        .bg-image('../../../../static/img/erxing');
       }
-      .z3 {
-        .bg-image("../../../../static/img/z3");
+      .sanxing {
+        .bg-image('../../../../static/img/sanxing');
       }
-      .z4 {
-        .bg-image("../../../../static/img/z4");
-      }
-      .z5 {
-        .bg-image("../../../../static/img/z5");
+      .sixing {
+        .bg-image('../../../../static/img/sixing');
       }
       .content {
         flex: 1;
         text-align: left;
-        color: #999;
+        color: #101010;
         .title {
           font-size: 0.32rem;
           color: #101010;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          p {
-            margin: 0;
-            color: #ef314b;
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-end;
-            font-size: 0.3rem;
-            span {
-              font-size: 0.24rem;
-            }
-          }
-        }
-        .act-title {
-          color: #000;
         }
         .remark {
           padding-top: 0.2rem;

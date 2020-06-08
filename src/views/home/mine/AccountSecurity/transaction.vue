@@ -1,30 +1,30 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('修改交易密码')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('修改交易密码')" @click-left="onClickLeft" left-arrow />
     <div class="mine-content">
       <div class="usernameWrap">
         <MyPhone :userList="registerInfo" @change-info="changeInfo"></MyPhone>
         <Smscode :userList="registerInfo" @change-code="changeCode"></Smscode>
         <van-field
+          :placeholder="$t('请输入6位新的交易密码')"
+          @input="registerInfo.trans_password = registerInfo.trans_password.trim()"
           type="password"
           v-model="registerInfo.trans_password"
-          @input="registerInfo.trans_password = registerInfo.trans_password.trim()"
-          :placeholder="$t('请输入6位新的交易密码')"
         />
         <van-field
+          :placeholder="$t('请重新输入新交易密码')"
+          @input="registerInfo.retradepassword = registerInfo.retradepassword.trim()"
           type="password"
           v-model="registerInfo.retradepassword"
-          @input="registerInfo.retradepassword = registerInfo.retradepassword.trim()"
-          :placeholder="$t('请重新输入新交易密码')"
         />
       </div>
       <van-button
-        class="loginBtn"
-        type="info"
-        color="#000"
-        size="large"
         @click="sure_edit"
+        class="loginBtn"
+        color="#EF314B"
+        size="large"
+        type="info"
       >{{$t('确定')}}</van-button>
     </div>
   </div>
@@ -35,7 +35,7 @@ import Vue from "vue";
 import { mapState } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       registerInfo: {
         moblie: "",
@@ -50,14 +50,14 @@ export default {
     ...mapState(["LOADING"])
   },
   methods: {
-    changeInfo(val) {
+    changeInfo (val) {
       this.registerInfo = val;
     },
-    changeCode(val) {
+    changeCode (val) {
       this.registerInfo = val;
     },
     // 确定修改
-    sure_edit() {
+    sure_edit () {
       let reg_pwd = /^[0-9]{6}$/;
       if (this.registerInfo.smscode === "") {
         this.$toast(this.$t("验证码不得为空"));
@@ -97,7 +97,7 @@ export default {
         }
       });
     },
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     }
@@ -106,7 +106,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   overflow: hidden;
@@ -126,7 +126,7 @@ export default {
           background-repeat: no-repeat;
           background-size: 0.45rem;
           background-position: left;
-          .bg-image("../../../../../static/img/yanzhengma");
+          .bg-image('../../../../../static/img/yanzhengma');
         }
       }
 
@@ -139,10 +139,11 @@ export default {
           padding-left: 0.6rem;
         }
         &:nth-of-type(3) {
-          .bg-image("../../../../../static/img/mima-blue");
+          background-size: 0.44rem;
+          .bg-image('../../../../../static/img/mima');
         }
         &:nth-of-type(4) {
-          .bg-image("../../../../../static/img/mima-sure");
+          .bg-image('../../../../../static/img/mima-sure');
         }
       }
       /deep/.myPhone {
@@ -151,14 +152,14 @@ export default {
           background-repeat: no-repeat;
           background-size: 0.44rem;
           background-position: left;
-          .bg-image("../../../../../static/img/shoujihao"); //小手机
+          .bg-image('../../../../../static/img/shoujihao'); //小手机
           .van-field__body {
             flex-direction: row-reverse;
             -ms-flex-direction: row-reverse;
             .van-field__button {
               padding-left: 0.6rem;
               padding-right: 0.5rem;
-              .bg-image("../../../../../static/img/down"); //小箭头
+              .bg-image('../../../../../static/img/down'); //小箭头
               background-repeat: no-repeat;
               background-size: 0.14rem;
               background-position: 80% center;

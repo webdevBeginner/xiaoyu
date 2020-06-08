@@ -1,10 +1,12 @@
 <template>
   <div class="activityList-content">
+    <van-nav-bar :title="$t('活动中心')" @click-left="onClickLeft" left-arrow />
     <!-- 活动中心首页列表 -->
     <ol>
       <li>
         <div>
           <img :src="require('#/img/activityCenter/qianghongbao.png')" />
+          <p class="cont">每日红包大放送</p>
         </div>
         <div class="describe">
           <van-row>
@@ -12,7 +14,7 @@
               <span>活动期间，平台每日投放大量HGF大红包</span>
             </van-col>
             <van-col span="12">
-              <van-button @click="fnShowPop('RedBox')" type="primary" class="btn">点我，领取</van-button>
+              <van-button @click="fnShowPop('RedBox')" class="btn" type="primary">点我，领取</van-button>
             </van-col>
           </van-row>
         </div>
@@ -25,10 +27,10 @@
         <div class="describe">
           <van-row>
             <van-col span="12">
-              <span>活动期间，每日可砸3次HGF金蛋1</span>
+              <span>活动期间，每日可砸3次HGF金蛋</span>
             </van-col>
             <van-col span="12">
-              <van-button @click="fnShowPop('HitEggs')" type="primary" class="btn">点我，砸蛋</van-button>
+              <van-button @click="fnShowPop('HitEggs')" class="btn" type="primary">点我，砸蛋</van-button>
             </van-col>
           </van-row>
         </div>
@@ -40,18 +42,23 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data() {
+  data () {
     return {
-      listArr: [{}]
+      listArr: [{}],
     };
   },
-  computed: {
-    ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
-  },
+  // computed: {
+  //   ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
+  // },
   methods: {
-    fnShowPop(name) {
+    fnShowPop (name) {
+
       this.$store.commit("get_activityListShowPop", true);
       this.$store.commit("get_activityListComponentName", name);
+    },
+    onClickLeft () {
+      // this.$router.push({ name: "login" });
+      window.history.go(-1);
     }
   }
 };
@@ -68,9 +75,20 @@ export default {
       background: rgba(255, 255, 255, 1);
       box-shadow: 0px 3px 5px 0px rgba(105, 105, 105, 0.35);
       border-radius: 20px;
-
+      position: relative;
       img {
         width: 100%;
+      }
+      .cont {
+        margin: 0;
+        position: absolute;
+        right: 0.4rem;
+        top: 0.54rem;
+        font-size: 0.7rem;
+        font-family: PingFang SC;
+        font-weight: 800;
+        color: rgba(255, 223, 73, 1);
+        text-shadow: 0px 4px 2px rgba(14, 14, 14, 0.75);
       }
       .describe {
         padding: 0.3rem 0.37rem 0;

@@ -1,19 +1,12 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('账号安全')" @click-left="onClickLeft" left-arrow />
+    <van-nav-bar :title="$t('新手指南')" @click-left="onClickLeft" left-arrow />
     <div class="mine-content">
       <van-cell-group>
-        <van-cell :title="$t('修改登录密码')" is-link to="/editLogin" />
-        <van-cell :title="$t('修改交易密码')" is-link to="/transaction" />
-        <van-cell :title="$t('清除缓存')" @click="clearStorage" is-link />
-        <van-cell
-          :title="$t('检测更新')"
-          :value="$t('当前版本 v') +version"
-          @click="showToast('当前已是最近版本！')"
-          is-link
-        />
-        <!-- <van-switch-cell v-model="isLock" :title="$t('手势密码')" @change="setLockPwd" /> -->
+        <van-cell :title="$t('直推相关问题')" @click="clearStorage" is-link />
+        <van-cell :title="$t('HGF的用途及来源')" is-link />
+        <van-cell :title="$t('资产详解')" @click="clearStorage" is-link />
       </van-cell-group>
     </div>
     <div @click="LogOut" class="bottom">{{$t('退出账号')}}</div>

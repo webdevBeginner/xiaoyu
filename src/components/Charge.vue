@@ -1,27 +1,27 @@
 <template>
-  <div style="height:100%;position: fixed" class="Charge">
+  <div class="Charge" style="height:100%;position: fixed">
     <!-- 弹出那个输入提现密码的弹出框 -->
     <van-popup
-      v-model="password_show"
-      closeable
-      :overlay="false"
       :duration="0.3"
+      :overlay="false"
       @click-overlay="nowCash(0)"
       @closed="nowCash(0)"
+      closeable
+      v-model="password_show"
     >
       <div class="title">{{$t('输入密码')}}</div>
       <input
+        :placeholder="$t('请输入密码')"
+        autofocus="autofocus"
         type="password"
         v-model="trans_password"
-        autofocus="autofocus"
-        :placeholder="$t('请输入密码')"
       />
       <van-button
-        type="info"
         :disabled="trans_password.length <6 || isDisable"
-        color="#2659FF"
-        size="large"
         @click="nowCash(1)"
+        color="#EF314B"
+        size="large"
+        type="info"
       >{{$t(btn_mes)}}</van-button>
     </van-popup>
     <div class="pop"></div>
@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       isDisable: false,
       rate: 0.98,
@@ -49,17 +49,17 @@ export default {
     }
   },
   methods: {
-    onInput(key) {
+    onInput (key) {
       this.trans_password = (this.trans_password + key).slice(0, 6);
     },
-    onDelete() {
+    onDelete () {
       this.trans_password = this.trans_password.slice(
         0,
         this.trans_password.length - 1
       );
     },
     // 提交密码
-    nowCash(type) {
+    nowCash (type) {
       if (this.trans_password.length >= 6 && type) {
         this.isDisable = true;
         setTimeout(() => {

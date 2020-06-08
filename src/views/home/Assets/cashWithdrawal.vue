@@ -1,75 +1,76 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('转账')" left-arrow @click-left="onClickLeft"></van-nav-bar>
+    <van-nav-bar :title="$t('转账')" @click-left="onClickLeft" left-arrow></van-nav-bar>
     <!-- 内容部分 -->
     <div class="mine-content">
       <div class="money_number">
         <p>{{$t('转账数量')}}：</p>
         <div class="input_money">
           <input
-            v-model="amount"
-            type="number"
             :maxlength="6"
-            :placeholder="$t('最小提币数量') + act_data.minMoney + 'ZEC'"
+            :placeholder="$t('最小提币数量') + act_data.minMoney + 'HGF'"
+            type="number"
+            v-model="amount"
           />
+          <span class="color">HGF</span>
         </div>
         <p class="balance">
           <span>
             {{$t('可用')}}
-            <i>{{act_data.balance}}</i>
-            {{get_chickens(act_data.type, "coinKeyType").name}}
-          </span>
-          <span v-if="amount && (amount - (+act_data.feeRate) >0)">
-            ，
-            {{$t('实际到账数量')}}
-            <i>{{(amount - (+act_data.feeRate)).toFixed(8)}}</i>
-            {{get_chickens(act_data.type, "coinKeyType").name}}
+            <i class="color">{{act_data.balance}}</i>
+            HGF
           </span>
         </p>
       </div>
       <!-- 手续费 -->
       <div class="money_number bind_address">
         <div class="input_address">
-          <span>{{$t('提现手续费')}} {{+act_data.feeRate}}</span>
-          <span>ZEC</span>
+          <span>{{$t('提现手续费')}} {{+amount * act_data.feeRate}}</span>
+          <span class="color">HGF</span>
         </div>
       </div>
       <!-- 提币地址 -->
       <div class="money_number bind_address">
         <p>{{$t('转账地址')}}：</p>
         <van-field
+          :placeholder="$t('请输入HGF地址')"
+          autosize
           class="input_USDT"
           rows="1"
-          v-model="act_data.address"
-          autosize
           type="textarea"
-          :placeholder="$t('请输入（火币网）ZEC地址')"
+          v-model="act_data.address"
         >
           <template #button>
-            <van-button size="mini" type="default" @click="startRecognize">
+            <van-button @click="startRecognize" size="mini" type="default">
               <van-icon name="scan" />
             </van-button>
           </template>
         </van-field>
       </div>
+      <p class="Address">请使用HGF地址</p>
+      <p class="Actual">
+        实际到账:
+        <span>{{amount-(+amount * act_data.feeRate)}}</span>
+        HGF
+      </p>
       <!-- 确定提现 -->
       <div class="sureBtn">
         <van-button
-          type="info"
-          :disabled="act_data.address === ''"
-          color="#006FDF"
-          size="large"
+          :disabled="act_data.address === '' || act_data.flg"
           @click="sureCash"
+          color="#EF314B"
+          size="large"
+          type="info"
         >{{$t('确定转账')}}</van-button>
         <p>{{$t(`温馨提示`)}}：</p>
-        <p>1、{{$t(`最少提币`)}}{{act_data.minMoney}} ZEC</p>
+        <p>1、{{$t(`最少提币`)}}{{act_data.minMoney}} HGF</p>
         <p>2、{{$t(`不支持匿名转账提币`)}}</p>
-        <p>{{`3、 ${$t('每笔转账将扣除价值')}${+act_data.feeRate}ZEC${$t('的矿工费。')}`}}</p>
+        <p>{{`3、 ${$t('每笔转账将扣除价值')}${+act_data.feeRate *100}%${$t('的矿工费。')}`}}</p>
       </div>
     </div>
-    <QrScanner v-if="scan_show" @showResult="showResult"></QrScanner>
-    <Charge v-if="pwd_show" @cash-pwd="pay" @close-pay="closePay()"></Charge>
+    <QrScanner @showResult="showResult" v-if="scan_show"></QrScanner>
+    <Charge @cash-pwd="pay" @close-pay="closePay()" v-if="pwd_show"></Charge>
   </div>
 </template>
 
@@ -77,12 +78,12 @@
 import { mapState, mapGetters } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       act_data: {
         rate: 0.98,
         balance: 0,
-        feeRate: 0.05,
+        rate: 0.05,
         type: 2,
         address: "",
         minMoney: ""
@@ -94,7 +95,7 @@ export default {
     };
   },
   watch: {
-    amount(val) {
+    amount (val) {
       if (Math.floor(val) > 1000000) {
         this.amount = 1000000;
         this.$toast("我们是有上限的哦！");
@@ -102,7 +103,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.init();
   },
   computed: {
@@ -110,15 +111,15 @@ export default {
     ...mapGetters(["get_chickens"])
   },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     },
     // 去修改提币地址的页面
-    goWalletManagement() {
+    goWalletManagement () {
       this.$router.push({ name: "WalletManagement" });
     },
-    init() {
+    init () {
       this.$store.commit("showLoading");
       this.mview.socket.send({
         data: {
@@ -137,8 +138,8 @@ export default {
     },
 
     // 确认开始提现
-    sureCash() {
-      let reg = /^(t|T)[0-9a-zA-Z]{34}$/;
+    sureCash () {
+      let reg = /^(0x)?[0-9a-fA-F]{40}$/;
       if (!reg.test(this.act_data.address)) {
         this.$toast(this.$t("请输入正确的提币地址"));
         return;
@@ -162,15 +163,15 @@ export default {
       }
     },
     // 提现记录页面
-    history() {
+    history () {
       this.$router.push({ path: "/home/WithdrawalsRecord" });
     },
-    closePay() {
+    closePay () {
       this.pwd_show = false;
       this.trans_password = "";
     },
     // 立即提现
-    pay(val) {
+    pay (val) {
       this.$store.commit("showLoading");
       this.mview.socket.send({
         data: {
@@ -197,10 +198,10 @@ export default {
     },
 
     //初始化扫描控件
-    startRecognize() {
+    startRecognize () {
       this.scan_show = true;
     },
-    showResult(val) {
+    showResult (val) {
       this.scan_show = false;
       this.act_data.address = val ? val : this.act_data.address;
     }
@@ -209,7 +210,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
+.color {
+  color: #f14156;
+  font-size: 0.24rem;
+}
 .register {
   height: 100%;
   display: flex;
@@ -244,7 +249,7 @@ export default {
         justify-content: space-between;
         padding: 0 0.26rem;
         color: #999;
-        font-size: 0.3rem;
+        font-size: 0.28rem;
         overflow: hidden;
         input {
           flex: 1;
@@ -261,7 +266,6 @@ export default {
         color: #999;
         i {
           font-style: normal;
-          color: #006fdf;
         }
       }
     }
@@ -296,8 +300,12 @@ export default {
         height: auto !important;
         line-height: 0.4rem;
         /deep/.van-field__control {
+          font-size: 0.28rem;
           height: 0.8rem !important;
         }
+      }
+      .van-icon-scan {
+        color: #f14156;
       }
     }
     .sureBtn {
@@ -312,6 +320,20 @@ export default {
         text-align: left;
       }
     }
+  }
+}
+.Address {
+  text-align: left;
+  padding-left: 0.4rem;
+  color: #ef314b;
+}
+.Actual {
+  text-align: center;
+  font-size: 0.3rem;
+  margin: 0.5rem 0;
+  span {
+    color: #ef314b;
+    font-size: 0.36rem;
   }
 }
 /deep/.van-button--mini {

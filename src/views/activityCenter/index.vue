@@ -4,13 +4,13 @@
     <activity-list></activity-list>
     <!-- 弹出层 - 拆红包 砸金蛋-->
     <van-popup
-      v-model="get_activityListShowPop"
       :close-on-click-overlay="false"
       :safe-area-inset-bottom="true"
-      overlay-class="shadeClassname"
       class="w100"
+      overlay-class="shadeClassname"
+      v-model="activityListShowPop"
     >
-      <component :is="get_activityListComponentName"></component>
+      <component :is="activityListComponentName"></component>
     </van-popup>
   </div>
 </template>
@@ -19,21 +19,22 @@
 import HitEggs from "./HitEggs";
 import RedBox from "./RedBox";
 import ActivityList from "./ActivityList";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
-  data() {
+  data () {
     return {};
   },
   computed: {
-    ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
+    ...mapState(["activityListShowPop", "activityListComponentName"])
+    // ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
   },
   components: { RedBox, HitEggs, ActivityList }
 };
 </script>
 
 <style lang="less" scoped>
-@import "../../style/mixin.less";
+@import '../../style/mixin.less';
 
 .activityList-content {
   .shadeClassname {

@@ -20,27 +20,35 @@ import QrScanner from '@/components/QrScanner'
 import LanguagePackage from '../static/i18n'
 import 'vant/lib/index.less'
 import './style/resetVant.less'
-import { Toast } from 'vant';
-import { Notify } from 'vant'
+import {
+    Toast
+} from 'vant';
+import {
+    Notify
+} from 'vant'
 import filters from './filter'
 import store from './store'
-import VueClipboard from 'vue-clipboard2';   //复制到剪切板
+import VueClipboard from 'vue-clipboard2'; //复制到剪切板
+import {
+    Lazyload
+} from 'vant';
 
+Vue.use(Lazyload);
 
 Vue.use(VueClipboard)
 const common_ = {
-  install(Vue) {
-    Vue.component('MyPhone', myPhone)
-    Vue.component('Card', Card)
-    Vue.component('Charge', Charge)
-    Vue.component('Smscode', Smscode)
-    Vue.component('loading', loading)
-    Vue.component('update', update)
-    Vue.component('Identify', Identify)
-    Vue.component('Lock', Lock)
-    Vue.component('FingerPrint', FingerPrint)
-    Vue.component('QrScanner', QrScanner)
-  }
+    install(Vue) {
+        Vue.component('MyPhone', myPhone)
+        Vue.component('Card', Card)
+        Vue.component('Charge', Charge)
+        Vue.component('Smscode', Smscode)
+        Vue.component('loading', loading)
+        Vue.component('update', update)
+        Vue.component('Identify', Identify)
+        Vue.component('Lock', Lock)
+        Vue.component('FingerPrint', FingerPrint)
+        Vue.component('QrScanner', QrScanner)
+    }
 }
 Vue.use(common_)
 
@@ -54,17 +62,17 @@ Vue.use(Storage, lsConfig.storageOptions);
 Vue.prototype.mview = mview
 Vue.config.productionTip = false
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
-Vue.locale = () => { }
+Vue.locale = () => {}
 const i18n = new VueI18n({
-  locale: window.localStorage.getItem('language') === null ? 'zh' : window.localStorage.getItem('language'), // 语言标识
-  messages: {
-    'en': Object.assign(LanguagePackage.en), // 英文
-    'zh': Object.assign(LanguagePackage.zh), // 英文
-  }
+    locale: window.localStorage.getItem('language') === null ? 'zh' : window.localStorage.getItem('language'), // 语言标识
+    messages: {
+        'en': Object.assign(LanguagePackage.en), // 英文
+        'zh': Object.assign(LanguagePackage.zh), // 英文
+    }
 })
 new Vue({
-  render: h => h(App),
-  router,
-  store,
-  i18n
+    render: h => h(App),
+    router,
+    store,
+    i18n
 }).$mount('#app')

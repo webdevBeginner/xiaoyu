@@ -1,16 +1,16 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('联系客服')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('联系客服')" @click-left="onClickLeft" left-arrow />
     <div class="mine-content">
       <div class="title">{{$t('邮箱地址')}}</div>
-      <p>ZDAO_Mia@yahoo.com</p>
-      <button class="btn" @click="doCopy('ZDAO_Mia@yahoo.com')">{{$t('复制')}}</button>
+      <p>HGF_Mia@yahoo.com</p>
+      <button @click="doCopy('HGF_Mia@yahoo.com')" class="btn">{{$t('复制')}}</button>
     </div>
     <div class="mine-content">
       <div class="title">{{$t('邮箱地址')}}</div>
-      <p>zdao_daria@yahoo.com</p>
-      <button class="btn" @click="doCopy('zdao_daria@yahoo.com')">{{$t('复制')}}</button>
+      <p>HGF_daria@yahoo.com</p>
+      <button @click="doCopy('HGF_daria@yahoo.com')" class="btn">{{$t('复制')}}</button>
     </div>
   </div>
 </template>
@@ -18,15 +18,15 @@
 <script>
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {};
   },
   methods: {
-    onClickLeft() {
+    onClickLeft () {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     },
-    doCopy(text) {
+    doCopy (text) {
       this.$copyText(text).then(
         e => {
           // success
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -61,7 +61,7 @@ export default {
     background: #fff;
     border-radius: 0.1rem;
     padding: 0 0.26rem 0.4rem;
-    border: 1px solid #c2e0ff;
+    border: 1px solid #ffc1c9;
     box-sizing: border-box;
     .title {
       line-height: 1rem;
@@ -78,9 +78,9 @@ export default {
     }
     button {
       font-size: 0.3rem;
-      color: #2659ff;
+      color: #ef314b;
       font-weight: normal;
-      background: #c2e0ff;
+      background: #ffc1c9;
       border: 0;
       width: 5.14rem;
       height: 0.86rem;

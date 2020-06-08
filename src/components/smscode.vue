@@ -1,18 +1,18 @@
 <template>
   <div class="smscode">
     <van-field
-      v-model="userInfo.smscode"
-      center
       :label="label"
-      clearable
       :placeholder="$t('请输入验证码')"
-      @focus="get_moblie"
       @blur="changeCodeNum"
+      @focus="get_moblie"
+      center
+      clearable
+      v-model="userInfo.smscode"
     >
-      <van-button :disabled="!isCode" slot="button" size="small" @click="showCode">
+      <van-button :disabled="!isCode" @click="showCode" size="small" slot="button">
         <span v-if="isCode">{{$t('获取验证码')}}</span>
         <div v-else>
-          <van-count-down format="ss" :time="120*1000" />
+          <van-count-down :time="120*1000" format="ss" />
           <span>S</span>
         </div>
       </van-button>
@@ -31,7 +31,7 @@ export default {
       default: ""
     }
   },
-  data() {
+  data () {
     return {
       isCode: true,
       show: false,
@@ -45,15 +45,15 @@ export default {
     ...mapState(["lockPhone"])
   },
   methods: {
-    changeCodeNum() {
+    changeCodeNum () {
       this.$emit("change-code", this.userInfo);
       console.log(this.userInfo);
     },
-    get_moblie() {
+    get_moblie () {
       this.userInfo = JSON.parse(JSON.stringify(this.userList));
     },
     // 获取验证码
-    showCode() {
+    showCode () {
       console.log(this.userList);
       this.userInfo = JSON.parse(JSON.stringify(this.userList));
       let reg = /^[1]([3-9])[0-9]{9}$/;
@@ -95,16 +95,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../style/mixin.less";
+@import '../style/mixin.less';
 .smscode {
   /deep/.van-cell {
     .van-field__button {
       height: 0.56rem;
       .van-button {
-        font-size: 0.3rem;
+        font-size: 0.24rem;
         .van-count-down,
         span {
-          color: #000;
+          color: #ef314b;
           line-height: 0.56rem;
           float: left;
           margin-right: 5px;

@@ -1,17 +1,17 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-icon name="arrow-left" color="#fff" @click="onClickLeft" />
+    <van-icon @click="onClickLeft" color="#fff" name="arrow-left" />
     <p>{{$t('助记词备份')}}</p>
     <div class="mine-content">
       <Words
-        v-if="!add_show && word_list.length"
         :password="password"
         :word="word"
         :word_list="word_list"
+        v-if="!add_show && word_list.length"
       ></Words>
     </div>
-    <Charge v-if="add_show" @cash-pwd="sure_btn" btn_mes="确定" @close-pay="closePay()"></Charge>
+    <Charge @cash-pwd="sure_btn" @close-pay="closePay()" btn_mes="确定" v-if="add_show"></Charge>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import { formateDate } from "@/utils/date";
 import { mapGetters, mapState } from "vuex";
 export default {
   // USER_INVITE_VIEW
-  data() {
+  data () {
     return {
       add_show: true,
       password: "",
@@ -32,10 +32,10 @@ export default {
     ...mapState(["LOADING"]),
     ...mapGetters(["get_chickens"])
   },
-  created() {},
+  created () { },
   methods: {
     // 获取助记词
-    sure_btn(val) {
+    sure_btn (val) {
       this.password = val;
       this.$store.commit("showLoading");
       this.mview.socket.send({
@@ -55,11 +55,11 @@ export default {
         }
       });
     },
-    closePay() {
+    closePay () {
       window.history.go(-1);
       this.password = "";
     },
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     }
   }
@@ -67,7 +67,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -77,7 +77,7 @@ export default {
   p {
     margin: 0;
     font-size: 0.48rem;
-    color: #2659ff;
+    color: #ef314b;
     font-weight: 900;
   }
   .van-icon {

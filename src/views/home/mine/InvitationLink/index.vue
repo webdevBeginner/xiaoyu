@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('邀请链接')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('邀请链接')" @click-left="onClickLeft" left-arrow />
     <div class="mine-content" ref="content">
       <!-- <img v-if="posterDataUrl" :src="posterDataUrl" alt /> -->
       <div class="share-bg">
@@ -36,7 +36,7 @@ import domtoimage from "dom-to-image";
 import html2canvas from "html2canvas";
 export default {
   // USER_INVITE_VIEW
-  data() {
+  data () {
     return {
       img: "",
       saveImgpath: "",
@@ -45,12 +45,12 @@ export default {
       posterDataUrl: ""
     };
   },
-  async mounted() {
+  async mounted () {
     this.qrcode();
   },
   components: { QRCode, domtoimage, html2canvas },
   methods: {
-    qrcode() {
+    qrcode () {
       this.mview.socket.send({
         data: {
           method: "USER_INVITE_VIEW"
@@ -61,7 +61,7 @@ export default {
             // img.setAttribute("crossOrigin", "anonymous");
             this.link1 = data.Data.code;
             this.link = `http://zdaoweb.com/download/app.html`;
-            this.$nextTick(function() {
+            this.$nextTick(function () {
               let canvas = document.getElementById("qrCode-canvas");
               QRCode.toCanvas(canvas, this.link, error => {
                 if (error) {
@@ -76,10 +76,10 @@ export default {
                   let vm = this;
                   domtoimage
                     .toPng(content, { quality: 0.95 })
-                    .then(function(dataUrl) {
+                    .then(function (dataUrl) {
                       vm.posterDataUrl = dataUrl;
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                       console.error("oops, something went wrong!", error);
                     });
                 }
@@ -91,7 +91,7 @@ export default {
         }
       });
     },
-    doCopy() {
+    doCopy () {
       this.$copyText(this.link).then(
         e => {
           // success
@@ -110,7 +110,7 @@ export default {
     },
 
     //转换图片文件
-    screenShot() {
+    screenShot () {
       let that = this;
       that.mview.socket.send({
         data: {
@@ -122,10 +122,10 @@ export default {
             let path = data.Data.imgPath;
             plus.gallery.save(
               path,
-              function() {
+              function () {
                 that.$toast(that.$t("保存图片到相册成功"));
               },
-              function(e) {
+              function (e) {
                 that.$toast(that.$t("保存失败"));
               }
             );
@@ -135,7 +135,7 @@ export default {
         }
       });
     },
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     }
   }
@@ -143,7 +143,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../../style/mixin.less";
+@import '../../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -162,7 +162,7 @@ export default {
       background-repeat: no-repeat;
       background-size: contain;
       border-radius: 0.3rem;
-      .bg-image("../../../../../static/img/share-bg");
+      .bg-image('../../../../../static/img/share-bg');
       overflow: hidden;
       position: relative;
       .share-po {
@@ -200,7 +200,7 @@ export default {
           #qrcode {
             width: 1.48rem;
             height: 1.48rem;
-            border: 4px solid #2659ff;
+            border: 4px solid #ef314b;
             margin-right: 0.3rem;
             border-radius: 0.1rem;
             overflow: hidden;
@@ -222,7 +222,7 @@ export default {
       bottom: 0;
       left: 0;
       background: #fff;
-      color: #2659ff;
+      color: #ef314b;
       font-size: 0.3rem;
       line-height: 0.98rem;
       span {

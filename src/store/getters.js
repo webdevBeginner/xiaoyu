@@ -9,9 +9,9 @@ export const state = {
     now_id: 0,
     money: 0,
     badgeList: [],
-    
-    activityListShowPop : false, // 活动中心弹窗显示状态
-    activityListComponentName : "" // 活动中心弹窗内容模板
+
+    activityListShowPop: false, // 活动中心弹窗显示状态
+    activityListComponentName: "" // 活动中心弹窗内容模板
 }
 
 

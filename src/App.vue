@@ -3,13 +3,13 @@
     <!-- 中英文切换 -->
     <transition name="van-fade">
       <div style="height: 100%;z-index:10;position:relative;overflow:hidden">
-        <div class="chose" v-if="$route.meta.type === 1">
+        <!-- <div class="chose" v-if="$route.meta.type === 1">
           <a :class="{isact : isAct}" @click="changeLanguage"></a>
-        </div>
+        </div> -->
         <router-view />
       </div>
     </transition>
-    <div v-show="isStart" class="ZDAO-start"></div>
+    <!-- <div v-show="isStart" class="ZDAO-start"></div> -->
     <!-- <update v-show="!isStart"></update> -->
   </div>
 </template>
@@ -19,38 +19,23 @@ export default {
   name: "App",
   data() {
     return {
-      isStart: true,
-      isAct: true,
+      // isStart: true,
+      // isAct: true,
       version: ""
     };
   },
   created() {
-    if (localStorage.getItem("language")) {
-      this.isAct = localStorage.getItem("language") === "en" ? true : false;
-    } else {
-      this.$i18n.locale = this.isAct ? "en" : "zh";
-    }
+    // if (localStorage.getItem("language")) {
+    //   this.isAct = localStorage.getItem("language") === "en" ? true : false;
+    // } else {
+    //   this.$i18n.locale = this.isAct ? "en" : "zh";
+    // }
   },
 
   mounted() {
-    setTimeout(() => {
-      this.isStart = false;
-    }, 2000);
-    this.mview.socket.send({
-      data: {
-        method: "SYSTEM_VERSION"
-      },
-      success: data => {
-        if (data.Code == 0) {
-          localStorage.setItem("version", data.Message);
-          if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) {
-            if (process.env.VUE_APP_VERSION != data.Message) {
-              this.$store.commit("showUpdate", true);
-            }
-          }
-        }
-      }
-    });
+    // setTimeout(() => {
+    //   this.isStart = false;
+    // }, 2000);
   },
   methods: {
     changeLanguage() {

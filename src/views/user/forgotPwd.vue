@@ -2,27 +2,28 @@
   <div class="register">
     <!-- 顶部导航栏 -->
     <loading v-show="LOADING"></loading>
-    <van-nav-bar :title="$t('找回密码')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('找回密码')" @click-left="onClickLeft" left-arrow />
     <!-- logo -->
     <div class="register">
-      <div class="logo"></div>
+      <div class="logo-border">
+        <div class="logo"></div>
+      </div>
       <div class="usernameWrap">
         <MyPhone :userList="registerInfo" @change-info="changeInfo"></MyPhone>
         <Smscode :userList="registerInfo" @change-code="changeCode"></Smscode>
         <van-field
+          :placeholder="$t('请设置6-16位的密码')"
           type="password"
           v-model="registerInfo.password"
-          :placeholder="$t('请设置6-16位的密码')"
         />
-        <van-field type="password" v-model="registerInfo.re_password" :placeholder="$t('请重新输入密码')" />
+        <van-field :placeholder="$t('请重新输入密码')" type="password" v-model="registerInfo.re_password" />
       </div>
       <van-button
-        class="loginBtn"
-        round
-        type="info"
-        color="linear-gradient(to right, #FEE449, #FFC233)"
-        size="large"
         @click="loginBtn"
+        class="loginBtn"
+        color="#ef314b"
+        size="large"
+        type="info"
       >{{$t('确定')}}</van-button>
     </div>
   </div>
@@ -32,7 +33,7 @@
 import { mapGetters, mapState } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       // isCode: true,
       registerInfo: {
@@ -49,17 +50,17 @@ export default {
     ...mapGetters(["get_chickens"])
   },
   methods: {
-    changeInfo(val) {
+    changeInfo (val) {
       this.registerInfo = val;
     },
-    changeCode(val) {
+    changeCode (val) {
       this.registerInfo = val;
     },
-    onClickLeft() {
+    onClickLeft () {
       this.$router.push({ name: "login" });
     },
     // 下一步
-    loginBtn() {
+    loginBtn () {
       // 当所有的验证通过之后进入下一步
       let reg = /^[1]([3-9])[0-9]{9}$/;
       let reg_pwd = /[A-Za-z0-9]$/;
@@ -125,22 +126,34 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../style/mixin.less";
+@import '../../style/mixin.less';
 .register {
-  background: rgb(34, 35, 55);
+  background: #f9f9f9;
   height: 100%;
   overflow: hidden;
   .van-nav-bar__title {
     letter-spacing: 0rem !important;
   }
 }
-.logo {
-  width: 2.6rem;
-  height: 4.12rem;
-  margin: 0.5rem auto 0.2rem;
-  .bg-image("../../../static/img/logo-dl");
-  background-size: contain;
-  background-repeat: no-repeat;
+.logo-border {
+  width: 4.14rem;
+  height: 4.34rem;
+  margin: 0.5rem auto 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ef314b;
+  border-radius: 0.1rem;
+  .logo {
+    width: 3.84rem;
+    height: 4.02rem;
+    background: #ef314b;
+    border-radius: 0.1rem;
+    .bg-image('../../../static/img/logo-dl');
+    background-size: 3.15rem 3.66rem;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 }
 /deep/.usernameWrap {
   margin: auto;
@@ -152,9 +165,9 @@ export default {
     .van-cell {
       margin-bottom: 0.2rem;
       background-repeat: no-repeat;
-      background-size: 0.45rem;
+      background-size: 0.4rem;
       background-position: left;
-      .bg-image("../../../static/img/yanzhengma") !important;
+      .bg-image('../../../static/img/yanzhengma') !important;
     }
   }
   .van-cell {
@@ -165,10 +178,10 @@ export default {
     .van-field__button {
       height: 0.56rem;
       .van-button {
-        font-size: 0.3rem;
+        font-size: 0.28rem;
         .van-count-down,
         span {
-          color: #fee449;
+          color: #f04159;
           line-height: 0.56rem;
           float: left;
           margin-right: 5px;
@@ -180,10 +193,10 @@ export default {
     }
 
     &:nth-of-type(3) {
-      .bg-image("../../../static/img/mima");
+      .bg-image('../../../static/img/mima');
     }
     &:nth-of-type(4) {
-      .bg-image("../../../static/img/mima-sure");
+      .bg-image('../../../static/img/mima-sure');
     }
   }
   .myPhone {
@@ -192,8 +205,8 @@ export default {
       background-repeat: no-repeat !important;
       background-size: 0.35rem;
       background-position: left;
-      background-size: 0.5rem;
-      .bg-image("../../../static/img/ren"); //这里是小人人
+      background-size: 0.4rem;
+      .bg-image('../../../static/img/shoujihao'); //这里是小人人
 
       .van-field__body {
         flex-direction: row-reverse;
@@ -202,7 +215,7 @@ export default {
           line-height: 0.56rem;
           padding-left: 0;
           padding-right: 0.5rem;
-          .bg-image("../../../static/img/down"); //小箭头
+          .bg-image('../../../static/img/down'); //小箭头
           background-repeat: no-repeat;
           background-size: 0.14rem;
           background-position: 80% center;

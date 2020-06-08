@@ -1,78 +1,166 @@
 <template>
   <div class="hitEggsClassname">
     <div class="hitEggsClassnameBox">
-      <van-row v-show="!isPrize" type="flex" justify="space-around" class="flexeggs">
-        <van-col v-for="(item, index) in eggsArr" :key="item.id" span="6">
+      <van-row class="flexeggs" justify="space-around" type="flex" v-show="!isPrize">
+        <van-col :key="item.id" ref="eggsEl" span="6" v-for="(item, index) in eggsArr">
           <img :src="item.path" @click="handleClick(index)" />
           <div>砸我</div>
         </van-col>
       </van-row>
 
-      <div v-show="isPrize" class="prize">
+      <div class="prize" v-show="isPrize">
         <div>
           <p>恭喜获得</p>
           <h3>100HGF</h3>
         </div>
         <img :src="require('#/img/activityCenter/zakai.png')" />
       </div>
+
+      <img
+        :class="hitClassName"
+        alt="hit"
+        id="hitElement"
+        ref="hitEl"
+        src="../../../static/img/activityCenter/hit.png"
+        v-show="!isPrize"
+      />
     </div>
 
-    <van-icon name="close" @click="closePop()" class="close-popup" size=".6rem" />
+    <van-icon @click="closePop()" class="close-popup" name="close" size=".6rem" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-const eggsImgPath = [
-  require("#/img/activityCenter/eggs.png"),
-  require("#/img/activityCenter/eggs2.jpg"),
-  require("#/img/activityCenter/zakai.png")
-];
+import eggsUrl from "#/img/activityCenter/eggs.png";
+import eggsUrl2 from "#/img/activityCenter/eggs2.jpg";
 
 export default {
-  data() {
+  data () {
     return {
       eggsArr: [
-        { id: 1001, threshold: 5, path: eggsImgPath[0] },
-        { id: 1002, threshold: 5, path: eggsImgPath[0] },
-        { id: 1003, threshold: 5, path: eggsImgPath[0] }
+        { id: 1001, path: eggsUrl },
+        { id: 1002, path: eggsUrl },
+        { id: 1003, path: eggsUrl }
       ],
-      // switchEvent: false,
-      isPrize: false
+      isPrize: false,
+      arrClickHistory: [],
+      hitAggesIndex: -1
     };
   },
   computed: {
-    ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
+    ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"]),
+    hitClassName () {
+      return "move" + this.hitAggesIndex;
+    }
   },
   methods: {
-    closePop(val) {
+    closePop (val) {
       this.$store.commit("get_activityListShowPop", false);
       this.$store.commit("get_activityListComponentName", "");
     },
 
-    handleClick(index, event) {
-      // if (this.switchEvent) return false;
-      let threshold = this.eggsArr[index].threshold;
-      this.eggsArr[index].threshold = --threshold;
+    handleClick (index) {
+      this.hitAggesIndex = index;
+      // 动画结束时事件
+      const _this = this;
+      let timer = null;
+      document.querySelector("#hitElement").addEventListener(
+        "webkitAnimationEnd",
+        function () {
+          _this.eggsArr[index].path = eggsUrl2; // 更换图片
+          timer = setTimeout(() => {
+            clearTimeout(timer);
+            _this.isPrize = true;
+          }, 1000);
 
-      switch (threshold) {
-        case 2:
-          this.eggsArr[index].path = eggsImgPath[1];
-          break;
-        case 0:
-          // this.eggsArr[index].path = eggsImgPath[2];
-          this.isPrize = true;
-          break;
+          this.audio = new Audio();
+          this.audio.src = "../../../static/media/activityCenter.mp3";
+          let playPromise;
+          playPromise = this.audio.play();
+          if (playPromise) {
+            playPromise
+              .then(() => {
+                // 音频加载成功
+                // 音频的播放需要耗时
+                that.tiemr = setInterval(() => {
+                  second--;
+                  if (second <= 0) {
+                    that.audio.pause();
+                    clearInterval(that.tiemr);
+                  }
+                }, 1000);
+              })
+              .catch(e => {
+                // 音频加载失败
+                console.error(e);
+              });
+          }
+        },
+        false
+      );
+    }
+  },
+  mounted () {
+    //添加css规则
+    function addCSSRule (sheet, selector, rules, index) {
+      if ("insertRule" in sheet) {
+        sheet.insertRule(selector + "{" + rules + "}", index);
+      } else if ("addRule" in sheet) {
+        sheet.addRule(selector, rules, index);
       }
     }
+    //删除CSS规则
+    function delCSSRule (sheet) {
+      sheet.deleteRule(0);
+    }
+    let kernelName = [
+      "@keyframes",
+      "@-moz-keyframes",
+      "@-webkit-keyframes",
+      "@-o-keyframes"
+    ];
+
+    setTimeout(() => {
+      let hitEl = this.$refs.hitEl;
+      let { offsetLeft, offsetTop } = hitEl;
+      for (let index = 0; index < this.eggsArr.length; index++) {
+        let item = this.$refs.eggsEl[index].$el;
+        let itemOffsetL = item.offsetLeft + item.clientWidth / 2;
+        let itemOffsetT = item.offsetTop;
+        //动态添加规则
+        addCSSRule(
+          document.styleSheets[0],
+          "@-webkit-keyframes" + " mymove" + index,
+          `0% {top:${offsetTop}px; left: ${offsetLeft}px;}
+          70% { top:${itemOffsetT}px; left: ${itemOffsetL}px; transform:rotate(0deg); transform-origin:0% 100%;}
+          80% { top:${itemOffsetT}px; left: ${itemOffsetL}px; transform:rotate(-90deg); transform-origin:0% 100%;}
+          90% { top:${itemOffsetT}px; left: ${itemOffsetL}px; transform:rotate(-10deg); transform-origin:0% 100%;}
+          95% { top:${itemOffsetT}px; left: ${itemOffsetL}px; transform:rotate(-90deg); transform-origin:0% 100%;}
+          100% { top:${itemOffsetT}px; left: ${itemOffsetL}px; transform:rotate(-10deg); transform-origin:0% 100%;}`
+        );
+      }
+    }, 100);
   }
 };
 </script>
-
-
 <style lang="less" scoped>
+.move0 {
+  animation: mymove0 1s forwards;
+  position: absolute;
+}
+.move1 {
+  animation: mymove1 1s forwards;
+  position: absolute;
+}
+.move2 {
+  animation: mymove2 1s forwards;
+  position: absolute;
+}
+
 .hitEggsClassname {
   .hitEggsClassnameBox {
+    position: relative;
     height: 8rem;
     display: flex;
     align-items: center;
@@ -102,6 +190,13 @@ export default {
   .prize {
     position: relative;
     height: 8rem;
+
+    color: #f35626;
+    background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: hue 60s infinite linear;
+
     div {
       position: absolute;
       width: 100%;
@@ -134,6 +229,14 @@ export default {
     img {
       width: 76.267%;
     }
+  }
+
+  #hitElement {
+    position: absolute;
+    right: 2rem;
+    top: 1rem;
+    width: 1.4rem;
+    height: 1.35rem;
   }
   .close-popup {
     &::before {

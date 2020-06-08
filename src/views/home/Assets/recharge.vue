@@ -1,7 +1,7 @@
 <template>
   <div class="register">
     <!-- 顶部导航栏 -->
-    <van-nav-bar :title="$t('充值')" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar :title="$t('充值')" @click-left="onClickLeft" left-arrow />
     <div class="mine-content">
       <div class="first-bg">
         <div class="white-bg">
@@ -13,13 +13,13 @@
       <div class="mine-bottom">
         <div class="title">{{$t('充值地址')}}</div>
         <p>{{link}}</p>
-        <button class="btn" @click="doCopy('link')">{{$t('复制')}}</button>
+        <button @click="doCopy('link')" class="btn">{{$t('复制')}}</button>
       </div>
       <div class="bottom">
         <p>{{$t(`温馨提示`)}}：</p>
-        <p>1. {{$t(`仅支持充值ZEC`)}}</p>
+        <p>1. {{$t(`仅支持充值HGF`)}}</p>
         <p>2. {{$t(`不支持匿名转账充值`)}}</p>
-        <p>3. {{$t(`最小充值数量为0.1ZEC`)}}</p>
+        <p>3. {{$t(`最小充值数量为1HGF`)}}</p>
         <p>4. {{$t(`12次网络确认后到账，24次网络确认后可提币`)}}</p>
       </div>
     </div>
@@ -31,14 +31,14 @@ import QRCode from "qrcode";
 import html2canvas from "html2canvas";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       saveImgpath: "",
       link: ""
     };
   },
-  created() {
-    this.$nextTick(function() {
+  created () {
+    this.$nextTick(function () {
       this.mview.socket.send({
         data: {
           method: "USER_ADDRESS_VIEW"
@@ -46,7 +46,7 @@ export default {
         success: data => {
           if (data.Code == 0) {
             this.link = data.Data.address;
-            this.$nextTick(function() {
+            this.$nextTick(function () {
               this.qrcode();
             });
           } else {
@@ -58,7 +58,7 @@ export default {
   },
   components: { QRCode, html2canvas },
   methods: {
-    qrcode() {
+    qrcode () {
       QRCode.toDataURL(this.link, {
         version: 7, //这个是版本号，
         errorCorrectionLevel: "Q", //这个是容错率,(建议选较低)更高的级别可以识别
@@ -74,7 +74,7 @@ export default {
           console.error(err); //这里看不懂的话去看一下Promise（then, catch）
         });
     },
-    doCopy(text) {
+    doCopy (text) {
       this.$copyText(this[text]).then(
         e => {
           // success
@@ -91,7 +91,7 @@ export default {
         }
       );
     },
-    onClickLeft() {
+    onClickLeft () {
       window.history.go(-1);
     }
   }
@@ -99,7 +99,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../../style/mixin.less";
+@import '../../../style/mixin.less';
 .register {
   height: 100%;
   display: flex;
@@ -112,7 +112,7 @@ export default {
       width: 2.9rem;
       height: 2.9rem;
       margin: 1.09rem auto 0.27rem;
-      background: #2659ff;
+      background: #ef314b;
       border-radius: 0.1rem;
       display: flex;
       justify-content: center;
@@ -157,7 +157,7 @@ export default {
         font-size: 0.3rem;
         color: #fff;
         font-weight: normal;
-        background: #2659ff;
+        background: #ef314b;
         border: 0;
         width: 2.9rem;
         height: 0.68rem;

@@ -1,15 +1,15 @@
 <template>
   <div class="myPhone">
     <van-field
-      v-model="userInfo.moblie"
-      :readonly="lockPhone"
-      type="tel"
-      @blur="changePhoneNum"
       :placeholder="$t('请输入手机号')"
+      :readonly="lockPhone"
+      @blur="changePhoneNum"
+      type="tel"
+      v-model="userInfo.moblie"
     >
-      <span slot="button" size="small" type="primary" @click="show=true">{{userInfo.country}}</span>
+      <span @click="show=true" size="small" slot="button" type="primary">{{userInfo.country}}</span>
     </van-field>
-    <van-action-sheet v-model="show" :actions="actions" @select="onSelect" />
+    <van-action-sheet :actions="actions" @select="onSelect" v-model="show" />
   </div>
 </template>
 
@@ -17,11 +17,11 @@
 import { mapState } from "vuex";
 export default {
   props: ["userList"],
-  data() {
+  data () {
     return {
       show: false,
       actions: [
-        { name: "+86", color: "#000" },
+        { name: "+86", color: "#F04159" },
         { name: "+66" },
         { name: "+60" },
         { name: "+84" },
@@ -42,21 +42,21 @@ export default {
     ...mapState(["lockPhone"])
   },
   watch: {
-    showPhone(val) {
+    showPhone (val) {
       console.log(val);
     }
   },
 
-  created() {
+  created () {
     console.log(this.lockPhone);
     this.$store.commit("showPhone", false);
     this.userInfo = JSON.parse(JSON.stringify(this.userList));
   },
   methods: {
-    changePhoneNum() {
+    changePhoneNum () {
       this.$emit("change-info", this.userInfo);
     },
-    onSelect(item) {
+    onSelect (item) {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       this.userInfo.country = item.name;
@@ -74,21 +74,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../style/mixin.less";
+@import '../style/mixin.less';
 /deep/.myPhone {
   .van-cell {
     margin-bottom: 0.2rem;
     background-repeat: no-repeat;
     background-size: 0.5rem;
     background-position: left;
-    .bg-image("../../static/img/shoujihao"); //小手机
+    .bg-image('../../static/img/shoujihao'); //小手机
     .van-field__body {
       flex-direction: row-reverse;
       -ms-flex-direction: row-reverse;
       .van-field__button {
         padding-left: 0;
         padding-right: 0.5rem;
-        .bg-image("../../static/img/down"); //小箭头
+        .bg-image('../../static/img/down'); //小箭头
         background-repeat: no-repeat;
         background-size: 0.14rem;
         background-position: 80% center;

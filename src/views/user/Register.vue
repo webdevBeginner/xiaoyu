@@ -3,64 +3,59 @@
     <!-- 顶部导航栏 -->
     <loading v-show="LOADING"></loading>
     <van-nav-bar
-      v-if="!$route.query.recomid"
       :title="$t('注册')"
-      left-arrow
       @click-left="onClickLeft"
+      left-arrow
+      v-if="!$route.query.recomid"
     />
     <!-- logo -->
     <div class="reg">
-      <div class="logo"></div>
+      <div class="logo-border">
+        <div class="logo"></div>
+      </div>
       <div class="usernameWrap">
         <MyPhone :userList="registerInfo" @change-info="changeInfo"></MyPhone>
         <Smscode :userList="registerInfo" @change-code="changeCode"></Smscode>
         <van-field
+          :placeholder="$t('请设置6-16位的密码')"
+          @input="registerInfo.password = registerInfo.password.trim()"
           type="password"
           v-model="registerInfo.password"
-          @input="registerInfo.password = registerInfo.password.trim()"
-          :placeholder="$t('请设置6-16位的密码')"
         />
         <van-field
+          :placeholder="$t('请再次输入密码')"
+          @input="registerInfo.re_password = registerInfo.re_password.trim()"
           type="password"
           v-model="registerInfo.re_password"
-          @input="registerInfo.re_password = registerInfo.re_password.trim()"
-          :placeholder="$t('请再次输入密码')"
         />
-        <van-field v-model="registerInfo.recomid" :placeholder="$t('请输入邀请码')" />
+        <van-field :placeholder="$t('请输入邀请码')" v-model="registerInfo.recomid" />
       </div>
       <van-button
-        class="loginBtn"
-        round
-        type="info"
-        color="linear-gradient(to right, #FEE449, #FFC233)"
-        size="large"
         :disabled="!isActive"
         @click="register"
+        class="loginBtn"
+        color="#F04159"
+        size="large"
+        type="info"
       >{{$t('注册')}}</van-button>
       <p class="linkWrap">
-        <span class="position" :class="isActive?'isClass':''" @click="changeActive"></span>
+        <span :class="isActive?'isClass':''" @click="changeActive" class="position"></span>
         {{$t('注册即表示同意')}}
-        <span @click="isShow = true">《{{$t('头号玩家平台服务协议')}}》</span>
+        <span @click="isShow = true">《{{$t('HGF平台服务协议')}}》</span>
       </p>
     </div>
-
-    <div v-if="$route.query.recomid" class="download">
+    <div class="download" v-if="$route.query.recomid">
       <div class="logo-btn"></div>
-      <div class="botton" @click="openApp">{{$t('打开App')}}</div>
+      <div @click="openApp" class="botton">{{$t('打开App')}}</div>
     </div>
     <!-- 弹出框 -->
-    <div v-show="isShow" class="show">
+    <div class="shadow" v-show="isShow"></div>
+    <div class="show" v-show="isShow">
       <div class="actio">
-        <p class="title">{{$t('头号玩家平台服务协议')}}</p>
-        <div v-html="text" class="content"></div>
+        <p class="title">{{$t('HGF平台服务协议')}}</p>
+        <div class="content" v-html="text"></div>
       </div>
-      <van-button
-        round
-        type="info"
-        color="linear-gradient(to right, #FEE449, #FFC233)"
-        size="large"
-        @click="isShow = false"
-      >{{$t('确定')}}</van-button>
+      <van-button @click="isShow = false" color="#F04159" size="large" type="info">{{$t('确定')}}</van-button>
     </div>
   </div>
 </template>
@@ -71,7 +66,7 @@ import listEn from "../../utils/text-en.json";
 import { mapGetters, mapState } from "vuex";
 export default {
   // SMS_EVERY_SEND
-  data() {
+  data () {
     return {
       text: "",
       isShow: false,
@@ -87,7 +82,7 @@ export default {
       }
     };
   },
-  created() {
+  created () {
     this.text =
       localStorage.getItem("language") === "zh" ? list.text : listEn.text;
     this.registerInfo.recomid = this.$route.query.recomid;
@@ -97,23 +92,23 @@ export default {
     ...mapGetters(["get_chickens"])
   },
   methods: {
-    changeInfo(val) {
+    changeInfo (val) {
       this.registerInfo = val;
     },
-    changeCode(val) {
+    changeCode (val) {
       this.registerInfo = val;
     },
-    onClickLeft() {
+    onClickLeft () {
       this.$router.push({ name: "login" });
     },
-    changeActive() {
+    changeActive () {
       this.isActive = !this.isActive;
     },
-    openApp() {
+    openApp () {
       window.location.href = "http://f.8ios.cn/v/etmaya";
     },
     // 注册
-    register() {
+    register () {
       let reg = /^[1]([3-9])[0-9]{9}$/;
       let reg_pwd = /[A-Za-z0-9]$/;
       if (this.registerInfo.moblie === "") {
@@ -180,10 +175,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../style/mixin.less";
+@import '../../style/mixin.less';
 
 .register {
-  background: rgb(34, 35, 55);
+  background: #f9f9f9;
   height: 100%;
   overflow: hidden;
   .download {
@@ -193,7 +188,7 @@ export default {
     height: 1rem;
     line-height: 1rem;
     font-size: 0.32rem;
-    background: #fee449;
+    background: #f04159;
     padding: 0.22rem 0.3rem;
     box-sizing: border-box;
     display: flex;
@@ -203,17 +198,17 @@ export default {
       height: 0.6rem;
       width: 1.62rem;
       margin: 0;
-      .bg-image("../../../static/img/logo-home");
+      .bg-image('../../../static/img/logo-register');
       background-size: contain;
       background-repeat: no-repeat;
     }
     .botton {
-      color: #333;
+      color: #fff;
       font-size: 0.28rem;
       width: 1.4rem;
       height: 0.44rem;
       line-height: 0.44rem;
-      border: 2px solid rgb(51, 51, 51);
+      border: 2px solid #fff;
       border-radius: 0.1rem;
     }
   }
@@ -221,13 +216,25 @@ export default {
 /deep/.reg {
   position: relative;
   height: 100%;
-  .logo {
-    height: 1.15rem;
-    width: 2.87rem;
+  .logo-border {
+    width: 4.14rem;
+    height: 1.72rem;
     margin: 1rem auto 0.7rem;
-    .bg-image("../../../static/img/logo-register");
-    background-size: contain;
-    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ef314b;
+    border-radius: 0.1rem;
+    .logo {
+      height: 1.37rem;
+      width: 3.84rem;
+      background: #ef314b;
+      border-radius: 0.1rem;
+      .bg-image('../../../static/img/logo-register');
+      background-size: 3rem 1.06rem;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
   }
 }
 
@@ -242,9 +249,9 @@ export default {
     .van-cell {
       margin-bottom: 0.2rem;
       background-repeat: no-repeat;
-      background-size: 0.45rem;
+      background-size: 0.4rem;
       background-position: left;
-      .bg-image("../../../static/img/yanzhengma") !important;
+      .bg-image('../../../static/img/yanzhengma') !important;
     }
   }
   .van-cell {
@@ -256,10 +263,10 @@ export default {
       line-height: 0.56rem;
       height: 0.56rem;
       .van-button {
-        font-size: 0.3rem;
+        font-size: 0.28rem;
         .van-count-down,
         span {
-          color: #fee449;
+          color: #f04159;
           line-height: 0.56rem;
           float: left;
           margin-right: 5px;
@@ -270,17 +277,17 @@ export default {
       }
     }
     &:nth-of-type(1) {
-      .bg-image("../../../static/img/shoujihao");
+      .bg-image('../../../static/img/shoujihao');
     }
 
     &:nth-of-type(3) {
-      .bg-image("../../../static/img/mima");
+      .bg-image('../../../static/img/mima');
     }
     &:nth-of-type(4) {
-      .bg-image("../../../static/img/mima-sure");
+      .bg-image('../../../static/img/mima-sure');
     }
     &:nth-of-type(5) {
-      .bg-image("../../../static/img/yaoqinghaoyou");
+      .bg-image('../../../static/img/yaoqinghaoyou');
     }
   }
   .myPhone {
@@ -293,7 +300,7 @@ export default {
         .van-field__button {
           padding-left: 0;
           padding-right: 0.5rem;
-          .bg-image("../../../static/img/down"); //小箭头
+          .bg-image('../../../static/img/down'); //小箭头
           background-repeat: no-repeat;
           background-size: 0.14rem;
           background-position: 80% center;
@@ -326,20 +333,29 @@ export default {
     display: inline-block;
     width: 0.34rem;
     height: 0.34rem;
-    .bg-image("../../../static/img/buxuan");
+    .bg-image('../../../static/img/buxuan');
     background-repeat: no-repeat;
     background-size: 0.34rem;
     background-position: center;
     padding: 0.2rem;
   }
   .isClass {
-    .bg-image("../../../static/img/xuan");
+    .bg-image('../../../static/img/xuan');
     z-index: 100;
   }
   span {
-    color: #fee449;
+    color: #f04159;
     text-decoration: underline;
   }
+}
+.shadow {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.49);
+  z-index: 10;
 }
 .show {
   width: 80%;
@@ -373,7 +389,7 @@ export default {
     }
   }
   .van-button {
-    margin-top: 0.3rem;
+    margin-top: 0.28rem;
     height: 0.86rem;
   }
 }
