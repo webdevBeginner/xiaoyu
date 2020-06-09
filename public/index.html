@@ -1,231 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>ZDao</title>
+    <title>HGF</title>
 
-  </head>
+</head>
 
-  <body>
+<body>
     <noscript>
-      <strong>We're sorry but ZDao doesn't work properly without JavaScript enabled.
+      <strong>We're sorry but HGF doesn't work properly without JavaScript enabled.
         Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-  </body>
+</body>
 
 </html>
 <script>
-  if (("standalone" in window.navigator) && window.navigator.standalone) {
-    var noddy, remotes = false;
-    document.addEventListener('click', function (event) {
-      noddy = event.target;
-      while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
-        noddy = noddy.parentNode;
-      }
-      if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)) {
-        event.preventDefault();
-        document.location.href = noddy.href;
-      }
-    }, false);
-  }
-  fnResize()
-  window.onresize = function () {
-    fnResize()
-  }
-  function fnResize() {
-    var deviceWidth = document.documentElement.clientWidth || window.innerWidth
-    if (deviceWidth >= 750) {
-      deviceWidth = 750
-    }
-    if (deviceWidth <= 320) {
-      deviceWidth = 320
-    }
-    document.documentElement.style.fontSize = (deviceWidth / 7.5) + 'px'
-  }
-  window.onload = function () {
-    document.addEventListener('touchstart', function (event) {
-      if (event.touches.length > 1) {
-        event.preventDefault();
-      }
-    });
-    var lastTouchEnd = 0;
-    document.addEventListener('touchend', function (event) {
-      var now = (new Date()).getTime();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
-    document.addEventListener('gesturestart', function (event) {
-      event.preventDefault();
-    });
-  }
-
-  // 原生开始
-  document.addEventListener('plusready', function () {
-    // 那个返回按钮
-    var first = null;
-    plus.key.addEventListener("backbutton", function () {
-      var webview = plus.webview.currentWebview();
-      if (this.location.hash == '#/home/dao' || this.location.hash == '#/home/Assets' || this.location.hash == '#/myTeam' || this.location.hash == '#/home/mine' || this.location.hash == '#/login') {
-        //首次按键，提示‘再按一次退出应用’
-        if (!first) {
-          first = new Date().getTime();
-          if (this.localStorage.language == 'en') {
-            plus.nativeUI.toast("Click to exit the app again")
-          } else {
-            plus.nativeUI.toast("再按一次退出应用")
-          }
-          setTimeout(function () {
-            first = null;
-          }, 1000);
-        } else {
-          console.log(123)
-          if (new Date().getTime() - first < 1500) {
-            plus.runtime.quit();
-          }
-        }
-      } else {
-        window.history.go(-1)
-      }
-    }, false);
-
-    if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) {
-      // 是否版本自动升级
-      plus.runtime.getProperty(plus.runtime.appid, function (inf) {
-        ver = inf.version;
-        console.log(ver)
-        ajax({
-          url: "http://47.57.135.36:9003/zdaoAppServer/version",
-          success: function (data) {
-            console.log(data + '-------------------')
-            if (data != ver) {
-              let obj = {
-                _msg: "发现新版本:V" + data,
-                _ready: "正在准备环境，请稍后！",
-                _err: '版本更新失败:',
-                _ts: '提示',
-                _sure: '立即更新',
-                _cancel: '取消',
-                _new: '当前版本号已是最新!',
-                _network: '网络异常,请稍候再试'
-
-              }
-              if (window.localStorage.language == 'en') {
-                obj = {
-                  _msg: "Discover a new version:V" + data,
-                  _ready: "Preparing the environment, please！",
-                  _err: 'Version update failed:',
-                  _ts: 'Tips',
-                  _sure: 'Update Now',
-                  _cancel: 'Cancel',
-                  _new: 'The current version number is up-to-date!',
-                  _network: 'Network anomalies, please try again later'
-                }
-              }
-              plus.nativeUI.confirm(obj._msg, function (e) {
-                if (e.index == 0) { //执行升级操作
-                  plus.nativeUI.toast(obj._ready);
-                  var dtask = plus.downloader.createDownload('http://47.57.135.36/ZDAO.apk?timer=' + new Date().getTime(), {}, function (d, status) {
-                    console.log(status)
-                    if (status == 200) {
-                      var path = d.filename;//下载apk
-                      plus.runtime.install(path); // 自动安装apk文件
-                    } else {
-                      plus.nativeUI.alert(obj._err + status);
-                    }
-                  });
-                  dtask.start();
-                  // plus.nativeUI.toast(dtask.);
-                }
-              }, obj._ts, [obj._sure, obj._cancel]);
+    if (("standalone" in window.navigator) && window.navigator.standalone) {
+        var noddy, remotes = false;
+        document.addEventListener('click', function(event) {
+            noddy = event.target;
+            while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
+                noddy = noddy.parentNode;
             }
-          },
-          error: function (xhr, type, errerThrown) {
-            plus.nativeUI.toast(obj._network);
-          }
-        });
-
-      });
+            if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes)) {
+                event.preventDefault();
+                document.location.href = noddy.href;
+            }
+        }, false);
     }
-  });
-
-
-
-  // 封装ajax请求
-  function ajax(options) {
-    /**
-     * 传入方式默认为对象
-     * */
-    options = options || {};
-    /**
-     * 默认为GET请求
-     * */
-    options.type = (options.type || "GET").toUpperCase();
-    /**
-      * 返回值类型默认为json
-      * */
-    options.dataType = options.dataType || 'json';
-    /**
-      * 默认为异步请求
-      * */
-    options.async = options.async || true;
-    /**
-     * 对需要传入的参数的处理
-     * */
-    var params = (options.data);
-    var xhr;
-    /**
-      * 创建一个 ajax请求
-      * W3C标准和IE标准
-      */
-    if (window.XMLHttpRequest) {
-      /**
-       * W3C标准
-       * */
-      xhr = new XMLHttpRequest();
-    } else {
-      /**
-       * IE标准
-       * @type {ActiveXObject}
-       */
-      xhr = new ActiveXObject('Microsoft.XMLHTTP')
+    fnResize()
+    window.onresize = function() {
+        fnResize()
     }
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState == 4) {
-        var status = xhr.status;
-        if (status >= 200 && status < 300) {
-          options.success && options.success(xhr.responseText, xhr.responseXML);
-        } else {
-          options.fail && options.fail(status);
+
+    function fnResize() {
+        var deviceWidth = document.documentElement.clientWidth || window.innerWidth
+        if (deviceWidth >= 750) {
+            deviceWidth = 750
         }
-      }
-    };
-    if (options.type == 'GET') {
-      xhr.open("GET", options.url, options.async);
-      xhr.send(null)
-    } else if (options.type == 'POST') {
-      /** 
-       *打开请求
-        * */
-      xhr.open('POST', options.url, options.async);
-      /**
-       * POST请求设置请求头
-       * */
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      /**
-       * 发送请求参数
-       */
-      xhr.send(params);
+        if (deviceWidth <= 320) {
+            deviceWidth = 320
+        }
+        document.documentElement.style.fontSize = (deviceWidth / 7.5) + 'px'
     }
-  }
-		   /**
-* 对象参数的处理
-* @param data
-* @returns {string}
-*/</script>
+    window.onload = function() {
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        });
+        var lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            var now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        document.addEventListener('gesturestart', function(event) {
+            event.preventDefault();
+        });
+    }
+
+    // 原生开始
+    document.addEventListener('plusready', function() {
+        // 那个返回按钮
+        var first = null;
+        plus.key.addEventListener("backbutton", function() {
+            var webview = plus.webview.currentWebview();
+            if (this.location.hash == '#/home/dao' || this.location.hash == '#/home/Assets' || this.location.hash == '#/myTeam' || this.location.hash == '#/home/mine' || this.location.hash == '#/login') {
+                //首次按键，提示‘再按一次退出应用’
+                if (!first) {
+                    first = new Date().getTime();
+                    if (this.localStorage.language == 'en') {
+                        plus.nativeUI.toast("Click to exit the app again")
+                    } else {
+                        plus.nativeUI.toast("再按一次退出应用")
+                    }
+                    setTimeout(function() {
+                        first = null;
+                    }, 1000);
+                } else {
+                    console.log(123)
+                    if (new Date().getTime() - first < 1500) {
+                        plus.runtime.quit();
+                    }
+                }
+            } else {
+                window.history.go(-1)
+            }
+        }, false);
+
+        if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) {
+            // 是否版本自动升级
+            plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+                ver = inf.version;
+                console.log(ver)
+                ajax({
+                    url: "http://47.57.135.36:9003/zdaoAppServer/version",
+                    success: function(data) {
+                        console.log(data + '-------------------')
+                        if (data != ver) {
+                            let obj = {
+                                _msg: "发现新版本:V" + data,
+                                _ready: "正在准备环境，请稍后！",
+                                _err: '版本更新失败:',
+                                _ts: '提示',
+                                _sure: '立即更新',
+                                _cancel: '取消',
+                                _new: '当前版本号已是最新!',
+                                _network: '网络异常,请稍候再试'
+
+                            }
+                            if (window.localStorage.language == 'en') {
+                                obj = {
+                                    _msg: "Discover a new version:V" + data,
+                                    _ready: "Preparing the environment, please！",
+                                    _err: 'Version update failed:',
+                                    _ts: 'Tips',
+                                    _sure: 'Update Now',
+                                    _cancel: 'Cancel',
+                                    _new: 'The current version number is up-to-date!',
+                                    _network: 'Network anomalies, please try again later'
+                                }
+                            }
+                            plus.nativeUI.confirm(obj._msg, function(e) {
+                                if (e.index == 0) { //执行升级操作
+                                    plus.nativeUI.toast(obj._ready);
+                                    var dtask = plus.downloader.createDownload('http://47.57.135.36/ZDAO.apk?timer=' + new Date().getTime(), {}, function(d, status) {
+                                        console.log(status)
+                                        if (status == 200) {
+                                            var path = d.filename; //下载apk
+                                            plus.runtime.install(path); // 自动安装apk文件
+                                        } else {
+                                            plus.nativeUI.alert(obj._err + status);
+                                        }
+                                    });
+                                    dtask.start();
+                                    // plus.nativeUI.toast(dtask.);
+                                }
+                            }, obj._ts, [obj._sure, obj._cancel]);
+                        }
+                    },
+                    error: function(xhr, type, errerThrown) {
+                        plus.nativeUI.toast(obj._network);
+                    }
+                });
+
+            });
+        }
+    });
+
+
+
+    // 封装ajax请求
+    function ajax(options) {
+        /**
+         * 传入方式默认为对象
+         * */
+        options = options || {};
+        /**
+         * 默认为GET请求
+         * */
+        options.type = (options.type || "GET").toUpperCase();
+        /**
+         * 返回值类型默认为json
+         * */
+        options.dataType = options.dataType || 'json';
+        /**
+         * 默认为异步请求
+         * */
+        options.async = options.async || true;
+        /**
+         * 对需要传入的参数的处理
+         * */
+        var params = (options.data);
+        var xhr;
+        /**
+         * 创建一个 ajax请求
+         * W3C标准和IE标准
+         */
+        if (window.XMLHttpRequest) {
+            /**
+             * W3C标准
+             * */
+            xhr = new XMLHttpRequest();
+        } else {
+            /**
+             * IE标准
+             * @type {ActiveXObject}
+             */
+            xhr = new ActiveXObject('Microsoft.XMLHTTP')
+        }
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                var status = xhr.status;
+                if (status >= 200 && status < 300) {
+                    options.success && options.success(xhr.responseText, xhr.responseXML);
+                } else {
+                    options.fail && options.fail(status);
+                }
+            }
+        };
+        if (options.type == 'GET') {
+            xhr.open("GET", options.url, options.async);
+            xhr.send(null)
+        } else if (options.type == 'POST') {
+            /** 
+             *打开请求
+             * */
+            xhr.open('POST', options.url, options.async);
+            /**
+             * POST请求设置请求头
+             * */
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            /**
+             * 发送请求参数
+             */
+            xhr.send(params);
+        }
+    }
+    /**
+     * 对象参数的处理
+     * @param data
+     * @returns {string}
+     */
+</script>

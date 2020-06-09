@@ -1,19 +1,72 @@
 <template>
   <div class="hitEggsClassname">
     <div class="hitEggsClassnameBox">
-      <van-row class="flexeggs" justify="space-around" type="flex" v-show="!isPrize">
-        <van-col :key="item.id" ref="eggsEl" span="6" v-for="(item, index) in eggsArr">
-          <img :src="item.path" @click="handleClick(index)" />
+      <van-row
+        class="flexeggs"
+        justify="space-around"
+        type="flex"
+        v-show="!isPrize"
+      >
+        <van-col
+          :key="item.id"
+          ref="eggsEl"
+          span="6"
+          v-for="(item, index) in eggsArr"
+        >
+          <transition
+            name="bounce"
+            enter-active-class="bounceIn"
+          >
+            <img
+              :src="item.path"
+              @click="handleClick(index)"
+              v-show="showAnimatedEggs"
+            />
+          </transition>
+
           <div>砸我</div>
         </van-col>
       </van-row>
 
-      <div class="prize" v-show="isPrize">
+      <div
+        class="prize"
+        v-show="isPrize"
+      >
         <div>
-          <p>恭喜获得</p>
-          <h3>100HGF</h3>
+
+          <transition
+            name="fade"
+            enter-active-class="fadeInUp"
+          >
+            <p
+              v-show="showAnimated"
+              style="animation-duration: 2.5s"
+            >恭喜获得</p>
+          </transition>
+
+          <transition
+            name="zoom"
+            enter-active-class="zoomIn"
+          >
+            <h3
+              v-show="showAnimated"
+              style="animation-duration: 1s"
+            >100HGF</h3>
+          </transition>
+
         </div>
-        <img :src="require('#/img/activityCenter/zakai.png')" />
+
+        <transition
+          name="bounce"
+          enter-active-class="bounceIn"
+        >
+          <img
+            v-show="showAnimated"
+            style="animation-duration: 2.5s"
+            :src="require('#/img/activityCenter/zakai.png')"
+          />
+        </transition>
+
       </div>
 
       <img
@@ -26,18 +79,18 @@
       />
     </div>
 
-    <van-icon @click="closePop()" class="close-popup" name="close" size=".6rem" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import eggsUrl from "#/img/activityCenter/eggs.png";
 import eggsUrl2 from "#/img/activityCenter/eggs2.jpg";
 
 export default {
-  data () {
+  data() {
     return {
+      showAnimated: false, // 动画开关
+      showAnimatedEggs: false, // 金蛋动画开关
       eggsArr: [
         { id: 1001, path: eggsUrl },
         { id: 1002, path: eggsUrl },
@@ -49,29 +102,27 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"]),
-    hitClassName () {
+    hitClassName() {
       return "move" + this.hitAggesIndex;
     }
   },
   methods: {
-    closePop (val) {
-      this.$store.commit("get_activityListShowPop", false);
-      this.$store.commit("get_activityListComponentName", "");
-    },
-
-    handleClick (index) {
+    handleClick(index) {
       this.hitAggesIndex = index;
       // 动画结束时事件
       const _this = this;
       let timer = null;
       document.querySelector("#hitElement").addEventListener(
         "webkitAnimationEnd",
-        function () {
+        function() {
           _this.eggsArr[index].path = eggsUrl2; // 更换图片
           timer = setTimeout(() => {
             clearTimeout(timer);
+
             _this.isPrize = true;
+            _this.$nextTick(() => {
+              _this.showAnimated = true;
+            });
           }, 1000);
 
           this.audio = new Audio();
@@ -101,9 +152,9 @@ export default {
       );
     }
   },
-  mounted () {
+  mounted() {
     //添加css规则
-    function addCSSRule (sheet, selector, rules, index) {
+    function addCSSRule(sheet, selector, rules, index) {
       if ("insertRule" in sheet) {
         sheet.insertRule(selector + "{" + rules + "}", index);
       } else if ("addRule" in sheet) {
@@ -111,7 +162,7 @@ export default {
       }
     }
     //删除CSS规则
-    function delCSSRule (sheet) {
+    function delCSSRule(sheet) {
       sheet.deleteRule(0);
     }
     let kernelName = [
@@ -121,6 +172,7 @@ export default {
       "@-o-keyframes"
     ];
 
+    this.showAnimatedEggs = true; // 展示金蛋
     setTimeout(() => {
       let hitEl = this.$refs.hitEl;
       let { offsetLeft, offsetTop } = hitEl;
@@ -140,10 +192,11 @@ export default {
           100% { top:${itemOffsetT}px; left: ${itemOffsetL}px; transform:rotate(-10deg); transform-origin:0% 100%;}`
         );
       }
-    }, 100);
+    }, 2000);
   }
 };
 </script>
+
 <style lang="less" scoped>
 .move0 {
   animation: mymove0 1s forwards;
@@ -190,12 +243,11 @@ export default {
   .prize {
     position: relative;
     height: 8rem;
-
     color: #f35626;
-    background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -webkit-animation: hue 60s infinite linear;
+    // background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+    // -webkit-background-clip: text;
+    // -webkit-text-fill-color: transparent;
+    // -webkit-animation: hue 60s infinite linear;
 
     div {
       position: absolute;
@@ -237,11 +289,6 @@ export default {
     top: 1rem;
     width: 1.4rem;
     height: 1.35rem;
-  }
-  .close-popup {
-    &::before {
-      color: #fff;
-    }
   }
 }
 </style>

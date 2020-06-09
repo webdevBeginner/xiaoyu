@@ -1,6 +1,11 @@
 <template>
   <div class="activityList-content">
-    <van-nav-bar :title="$t('活动中心')" @click-left="onClickLeft" left-arrow />
+    <van-nav-bar
+      :title="$t('活动中心')"
+      @click-left="onClickLeft"
+      left-arrow
+    />
+    
     <!-- 活动中心首页列表 -->
     <ol>
       <li>
@@ -14,7 +19,11 @@
               <span>活动期间，平台每日投放大量HGF大红包</span>
             </van-col>
             <van-col span="12">
-              <van-button @click="fnShowPop('RedBox')" class="btn" type="primary">点我，领取</van-button>
+              <van-button
+                @click="fnShowPop('RedBox')"
+                class="btn"
+                type="primary"
+              >点我，领取</van-button>
             </van-col>
           </van-row>
         </div>
@@ -30,7 +39,11 @@
               <span>活动期间，每日可砸3次HGF金蛋</span>
             </van-col>
             <van-col span="12">
-              <van-button @click="fnShowPop('HitEggs')" class="btn" type="primary">点我，砸蛋</van-button>
+              <van-button
+                @click="fnShowPop('HitEggs')"
+                class="btn"
+                type="primary"
+              >点我，砸蛋</van-button>
             </van-col>
           </van-row>
         </div>
@@ -40,23 +53,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
-  data () {
-    return {
-      listArr: [{}],
-    };
-  },
-  // computed: {
-  //   ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
-  // },
   methods: {
-    fnShowPop (name) {
-
-      this.$store.commit("get_activityListShowPop", true);
-      this.$store.commit("get_activityListComponentName", name);
+    fnShowPop(name) {
+      this.$store.commit("SETOPTIONS", {
+        activityListShowPop: true,
+        activityListComponentName: name
+      });
     },
-    onClickLeft () {
+    onClickLeft() {
       // this.$router.push({ name: "login" });
       window.history.go(-1);
     }

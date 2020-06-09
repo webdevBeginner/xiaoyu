@@ -27,14 +27,6 @@ export const getters = {
             keys.class_name = state['chickens'][name].find(_ => _.key === key).class_name ? state['chickens'][name].find(_ => _.key === key).class_name : ''
         }
         return keys
-    },
-
-    get_activityListShowPop: state => {
-        return state.activityListShowPop;
-    },
-
-    get_activityListComponentName: state => {
-        return state.activityListComponentName || "";
     }
 }
 
@@ -67,11 +59,12 @@ export const mutations = {
     get_badge_list(state, val) {
         state.badgeList = val
     },
-    get_activityListShowPop(state, val) {
-        state.activityListShowPop = val
+    SETOPTIONS(state, res) {
+        Object.keys(res).forEach(item => (state[item] = res[item]))
     },
-    get_activityListComponentName(state, val) {
-        state.activityListComponentName = val
+    SETOPTIONOBJ(state, res) {
+        const { filter, option } = res
+        Object.keys(option).forEach(item => (state[filter][item] = option[item]))
     }
 }
 

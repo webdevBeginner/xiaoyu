@@ -1,16 +1,25 @@
 <template>
   <div class="activityList-content">
+
     <!-- 活动中心首页列表 -->
     <activity-list></activity-list>
+
     <!-- 弹出层 - 拆红包 砸金蛋-->
     <van-popup
       :close-on-click-overlay="false"
       :safe-area-inset-bottom="true"
       class="w100"
       overlay-class="shadeClassname"
-      v-model="activityListShowPop"
+      v-model="$store.state.activityListShowPop"
     >
-      <component :is="activityListComponentName"></component>
+      <component :is="$store.state.activityListComponentName"></component>
+
+      <van-icon
+        @click="closePop()"
+        class="close-popup"
+        name="close"
+        size=".6rem"
+      />
     </van-popup>
   </div>
 </template>
@@ -19,22 +28,22 @@
 import HitEggs from "./HitEggs";
 import RedBox from "./RedBox";
 import ActivityList from "./ActivityList";
-import { mapGetters, mapState } from "vuex";
 
 export default {
-  data () {
-    return {};
-  },
-  computed: {
-    ...mapState(["activityListShowPop", "activityListComponentName"])
-    // ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
-  },
-  components: { RedBox, HitEggs, ActivityList }
+  components: { RedBox, HitEggs, ActivityList },
+  methods: {
+    closePop() {
+      this.$store.commit("SETOPTIONS", {
+        activityListShowPop: false,
+        activityListComponentName: ""
+      });
+    }
+  }
 };
 </script>
 
 <style lang="less" scoped>
-@import '../../style/mixin.less';
+@import "../../style/mixin.less";
 
 .activityList-content {
   .shadeClassname {
@@ -43,6 +52,12 @@ export default {
   .w100 {
     width: 100%;
     background-color: transparent;
+  }
+}
+
+.close-popup {
+  &::before {
+    color: #fff;
   }
 }
 

@@ -61,6 +61,11 @@ Vue.use(Storage, lsConfig.storageOptions);
 
 Vue.prototype.mview = mview
 Vue.config.productionTip = false
+
+// import animated from 'animate.css'
+// Vue.use(animated)
+require('vue2-animate/dist/vue2-animate.min.css')
+
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
 Vue.locale = () => {}
 const i18n = new VueI18n({

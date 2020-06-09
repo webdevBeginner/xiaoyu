@@ -1,79 +1,154 @@
 <template>
   <div class="redBoxClassname">
-    <div v-show="redBoxindex && !flg && show">
+    <!-- 已开奖 -->
+    <div v-show="showPageIndex == 2">
       <div class="prize">
-        <p>恭喜获得</p>
-        <h3>{{money}}HGF</h3>
+        <transition
+            name="fade"
+            enter-active-class="fadeInUp"
+          >
+            <p
+              v-show="showAnimated2"
+              style="animation-duration: 2.5s"
+            >恭喜获得</p>
+          </transition>
+
+          <transition
+            name="zoom"
+            enter-active-class="zoomIn"
+          >
+            <h3
+              v-show="showAnimated2"
+              style="animation-duration: 1s"
+            >{{money}}HGF</h3>
+          </transition>
       </div>
       <div class="watch">
         <p>奖励已到账</p>
         <p>请前去查看</p>
       </div>
+      
+      <transition
+        name="bounce"
+        enter-active-class="bounceIn"
+      >
+        <img
+          v-show="showAnimated2"
+          style="animation-duration: 2.5s"
+          :src="redBoxSrc"
+          class="redBox"
+        />
+      </transition>
+
     </div>
-    <img :src="redBoxSrc" class="redBox" v-if="show" />
-    <img
-      :src="require('#/img/activityCenter/kai.png')"
-      @click="receiveRedbox"
-      cl
-      class="kai"
-      v-show="!redBoxindex && flg && show"
-    />
-    <div v-show="!redBoxindex && flg && show">
+
+    <!--  待开奖 -->
+    <div v-show="showPageIndex == 1">
       <img
-        :src="require('#/img/activityCenter/lingquhongbao.png')"
-        @click="receiveRedbox"
-        class="redBoxbtn"
+        :src="redBoxSrc"
+        class="redBox"
       />
+      <transition
+        name="zoom"
+        enter-active-class="zoomIn"
+      >
+        <img
+          :src="require('#/img/activityCenter/hongbao-bottom.png')"
+          class="hongbao-bottom"
+          @click="handleClick(index)"
+          v-show="showAnimated"
+          style="animation-duration: 0.3s"
+        />
+      </transition>
+
+      <transition
+        name="flip"
+        enter-active-class="flipInY"
+      >
+        <img
+          :src="require('#/img/activityCenter/kai.png')"
+          @click="receiveRedbox"
+          class="kai"
+          v-show="showAnimated"
+          style="animation-duration:1s"
+        />
+      </transition>
+      <transition
+        name="flip"
+        enter-active-class="bounceIn"
+      >
+        <img
+          :src="require('#/img/activityCenter/lingquhongbao.png')"
+          @click="receiveRedbox"
+          class="redBoxbtn"
+          v-show="showAnimated"
+          style="animation-duration:2.5s"
+        />
+      </transition>
     </div>
-    <van-icon @click="closePop" class="close-popup" name="close" size=".6rem" />
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
 export default {
-  data () {
+  data() {
     return {
       flg: true,
       show: false,
-      money: 0.00,
+      money: 0.0,
       redBoxArr: [
         require("#/img/activityCenter/hongbao.png"),
         require("#/img/activityCenter/hongbao2.png")
       ],
-      redBoxindex: 0
+      redBoxindex: 0,
+
+      showAnimated: false, // 动画开关
+      showAnimated2: false, // 第二页动画开关
+      showPageIndex: 1 // 当前页码
     };
   },
-  created () {
-    this.mview.socket.send({
-      data: {
-        method: "REDPACKAGE_ACTIVITY_VIEW"
-      },
-      success: data => {
-        this.$store.commit("hideLoading");
-        if (data.Code == 0) {
-          this.show = true
-          this.flg = data.Data.flg
-          this.money = this.flg ? 0 : data.Data.money
-          this.redBoxindex = this.flg ? 0 : 1
-        } else {
-          this.show = false
-          this.$toast(this.$t(data.Message));
-        }
+  created() {
+    // this.mview.socket.send({
+    //   data: {
+    //     method: "REDPACKAGE_ACTIVITY_VIEW"
+    //   },
+    //   success: data => {
+    //     this.$store.commit("hideLoading");
+    //     if (data.Code == 0) {
+    var data = {
+      Data: {
+        flg: true,
+        money: 10
       }
-    });
+    };
+    this.show = true;
+    this.flg = data.Data.flg;
+    this.money = this.flg ? 0 : data.Data.money;
+    this.redBoxindex = this.flg ? 0 : 1;
+    //   } else {
+    //     this.show = false
+    //     this.$toast(this.$t(data.Message));
+    //   }
+    // }
+    // });
+  },
+  mounted() {
+    this.showAnimated = true;
   },
   computed: {
-    redBoxSrc () {
+    redBoxSrc() {
       return this.redBoxArr[this.redBoxindex];
-    },
-    // ...mapGetters(["get_activityListShowPop", "get_activityListComponentName"])
+    }
   },
   methods: {
-    receiveRedbox () {
+    receiveRedbox() {
       // 领取红包
-      this.flg = false
+      this.showPageIndex = 2; // 当前页码
+      this.showAnimated2 =  true; // 第二页动画开关
       this.redBoxindex = 1;
+      return false;
+
+      this.flg = false;
       this.mview.socket.send({
         data: {
           method: "REDPACKAGE_ACTIVITY_ACTION"
@@ -81,17 +156,12 @@ export default {
         success: data => {
           this.$store.commit("hideLoading");
           if (data.Code == 0) {
-            this.money = data.Data.money
+            this.money = data.Data.money;
           } else {
             this.$toast(this.$t(data.Message));
           }
         }
       });
-    },
-    closePop () {
-      this.show = false
-      this.$store.commit("get_activityListShowPop", false);
-      this.$store.commit("get_activityListComponentName", "");
     }
   }
 };
@@ -100,32 +170,40 @@ export default {
 <style lang="less" scoped>
 .redBoxClassname {
   position: relative;
+  height: 9rem;
   .redBox {
+    z-index: 100;
     width: 100%;
     position: relative;
   }
   .kai {
+    z-index: 110;
     width: 1.18rem;
     position: absolute;
     left: 3.16rem;
     top: 0.78rem;
   }
-  .redBoxbtn {
-    width: 50%;
-    margin: 0 auto;
-    display: block;
-    transform: translateY(-33px);
+  .hongbao-bottom {
+    z-index: 90;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 2.7rem;
   }
-  .close-popup {
-    &::before {
-      color: #fff;
-    }
+  .redBoxbtn {
+    position: absolute;
+    z-index: 130;
+    width: 50%;
+    display: block;
+    margin: -33px auto 0;
+    left: 0;
+    right: 0;
   }
   .prize {
     position: absolute;
     width: 100%;
     top: 2.3rem;
-    z-index: 9;
+    z-index: 200;
     p {
       margin: 0;
       padding: 0;
@@ -153,7 +231,7 @@ export default {
     position: absolute;
     width: 100%;
     top: 5.16rem;
-    z-index: 9;
+    z-index: 209;
     p {
       margin: 0;
       padding: 0;
